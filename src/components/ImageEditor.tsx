@@ -5,12 +5,12 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const anonKey = import.meta.env.VITE_ANON_KEY;
 const supabase = createClient(supabaseUrl, anonKey);
 
-export default function UploadImage() {
+export default function ImageEditor() {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imageUrls, setImageUrls] = useState<string[] | null>(null);
 
-  const handleAsk = async function askQuestion() {
+  const handleUpload = async function uploadImage() {
     if (!image) {
       alert("selecione uma imagem");
       return;
@@ -63,7 +63,7 @@ export default function UploadImage() {
         }
       />
       <button
-        onClick={handleAsk}
+        onClick={handleUpload}
         className="mt-2 p-2 w-full bg-blue-500 text-white rounded"
         disabled={loading}
       >
