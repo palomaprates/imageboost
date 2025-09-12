@@ -36,13 +36,9 @@ export default Deno.serve(async (req) => {
    const formData = await req.formData();
    const file = formData.get("file") as File | null;
    const userId = formData.get("user_id") as string | null;
-  //  const user_id = userId;
    if (!file) {
      return new Response("Arquivo não enviado ou usuário não identificado", { status: 400, headers: corsHeaders });
    }
-
-   // const arrayBuf = await file.arrayBuffer();
-   // const imgBytes = new Uint8Array(arrayBuf);
    const originalPath = `hello-world/${Date.now()}-${file.name}`;
    await supabase.storage.from("images").upload(originalPath, file, {
      contentType: file.type || "image/png",
