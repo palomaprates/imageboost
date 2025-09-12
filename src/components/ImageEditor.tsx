@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+import { supabase } from "../services/supabaseClient";
 const anonKey = import.meta.env.VITE_ANON_KEY;
-const supabase = createClient(supabaseUrl, anonKey);
 
 export default function ImageEditor() {
   const [loading, setLoading] = useState(false);
@@ -16,26 +13,24 @@ export default function ImageEditor() {
       return;
     }
     setLoading(true);
-
     try {
+      const formData = new FormData();
       const {
         data: { user },
-        error,
       } = await supabase.auth.getUser();
 
-      if (error || !user) {
-        throw new Error("Usuário não autenticado");
-      }
-      const formData = new FormData();
       formData.append("file", image);
-      formData.append("user_id", user.id);
+      if (user) {
+        formData.append("user_id", user.id);
+      }
       const res = await fetch(
-        "http://127.0.0.1:54321/functions/v1/hello-world",
+        "http://127.0.0.1:54321/functions/v1/image-edit",
         {
           method: "POST",
           body: formData,
           headers: {
             Authorization: `Bearer ${anonKey}`,
+            apikey: anonKey,
           },
         }
       );
