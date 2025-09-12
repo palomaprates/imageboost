@@ -38,7 +38,6 @@ export default function ImageEditor() {
         throw new Error("Erro na requisição");
       }
       const data = await res.json();
-      console.log("resultado", data);
       setImageUrls([data.original, ...(data.variations || [])]);
     } catch (e) {
       alert("error");
