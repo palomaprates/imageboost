@@ -1,7 +1,20 @@
 import { useState } from "react";
 import { supabase } from "../services/supabaseClient";
-const anonKey = import.meta.env.VITE_ANON_KEY;
 
+function toBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const base64 = reader.result as string;
+      resolve(base64);
+    };
+
+    reader.onerror = (error) => reject(error);
+
+    reader.readAsDataURL(file);
+  });
+}
 export default function ImageEditor() {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
@@ -14,31 +27,22 @@ export default function ImageEditor() {
     }
     setLoading(true);
     try {
-      const formData = new FormData();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      formData.append("file", image);
-      if (user) {
-        formData.append("user_id", user.id);
-      }
-      const res = await fetch(
-        "http://127.0.0.1:54321/functions/v1/image-edit",
+      const imageb64 = await toBase64(image);
+      const { data, error } = await supabase.functions.invoke(
+        "image-generator",
         {
-          method: "POST",
-          body: formData,
-          headers: {
-            Authorization: `Bearer ${anonKey}`,
-            apikey: anonKey,
+          body: {
+            file: imageb64,
+            user_id: "8059f3bf-80d2-4d4e-8194-212a7bf5cacb",
           },
         }
       );
-      if (!res.ok) {
+
+      if (error) {
         throw new Error("Erro na requisição");
       }
-      const data = await res.json();
       setImageUrls([data.original, ...(data.variations || [])]);
+      console.log("image no front", data.original);
     } catch (e) {
       alert("error");
     }
