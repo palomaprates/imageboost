@@ -33,7 +33,7 @@ Deno.serve(async (req) => {
       public: true,
     });
 
-    if (error) console.error(error);
+    if (error) console.error("erro ao criar bucket", error);
     else console.log("Bucket criado:", data);
     const { file, user_id } = await req.json();
     if (!file) {
