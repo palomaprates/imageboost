@@ -1,3 +1,4 @@
+import DisplayImages from "@/components/DisplayImages";
 import { supabase } from "@/services/supabaseClient";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -9,7 +10,7 @@ export const Route = createFileRoute("/history/$id")({
 
 function HistoryRoute() {
   const { id } = Route.useParams();
-  const [image, setImage] = useState<string | null>(null);
+  const [images, setImages] = useState<string[] | null>(null);
 
   useEffect(() => {
     async function fetchImage() {
@@ -23,12 +24,16 @@ function HistoryRoute() {
         console.error(error);
       } else {
         console.log("URL da imagem:", data);
-        setImage(data.image_url);
+        setImages([data.image_url, ...data.variations_url]);
       }
     }
 
     fetchImage();
   }, [id]);
 
-  return <div>{image && <img src={image} alt="history" />}</div>;
+  return (
+    <div>
+      <DisplayImages imageUrls={images} />
+    </div>
+  );
 }

@@ -27,10 +27,6 @@ type NavProjectsProps = {
 
 export function NavProjects({ history }: NavProjectsProps) {
   const { isMobile } = useSidebar();
-  // const current = history.find((h) => String(h.id) === historyId);
-  // if (!current) {
-  //   return <p>Item não encontrado</p>;
-  // }
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
