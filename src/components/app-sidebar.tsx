@@ -43,9 +43,14 @@ const data = {
   ],
 };
 
+export type HistoryItem = {
+  id: number | string;
+  description: string;
+  image: string;
+};
 interface AppSidebarProps
   extends React.ComponentPropsWithoutRef<typeof Sidebar> {
-  history: { id: number; description: string; image: string }[];
+  history: HistoryItem[];
 }
 
 export function AppSidebar({ history, ...props }: AppSidebarProps) {
