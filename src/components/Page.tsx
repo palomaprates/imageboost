@@ -13,7 +13,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import ImageEditor from "./ImageEditor";
 import { useEffect, useState } from "react";
 import { supabase } from "@/services/supabaseClient";
 import { Outlet } from "@tanstack/react-router";
@@ -70,7 +69,6 @@ export default function Page() {
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
             <div className="grid auto-rows-min gap-4 md:grid-cols-3"></div>
             <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min">
-              <ImageEditor />
               <Outlet />
             </div>
           </div>
