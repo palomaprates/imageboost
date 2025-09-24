@@ -15,6 +15,7 @@ function toBase64(file: File): Promise<string> {
     reader.readAsDataURL(file);
   });
 }
+
 export default function ImageEditor() {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
