@@ -1,11 +1,18 @@
 import "./App.css";
-import Page from "./components/Page";
+import { RouterProvider, Router } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
 
+const router = new Router({ routeTree });
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 function App() {
   return (
     <>
       <div className="w-screen h-screen">
-        <Page />
+        <RouterProvider router={router} />
       </div>
     </>
   );
