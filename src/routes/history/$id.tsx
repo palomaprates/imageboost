@@ -1,7 +1,7 @@
 import DisplayImages from "@/components/DisplayImages";
-import { supabase } from "@/services/supabaseClient";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchImage } from "@/components/Generation";
 
 export const Route = createFileRoute("/history/$id")({
   component: HistoryRoute,
@@ -10,30 +10,26 @@ export const Route = createFileRoute("/history/$id")({
 
 function HistoryRoute() {
   const { id } = Route.useParams();
-  const [images, setImages] = useState<string[] | null>(null);
 
-  useEffect(() => {
-    async function fetchImage() {
-      const { data, error } = await supabase
-        .from("images")
-        .select()
-        .eq("id", id)
-        .single();
+  const { data: generation, isLoading } = useQuery({
+    queryKey: ["generation", id],
+    queryFn: () => fetchImage(id),
+    staleTime: Infinity,
+  });
 
-      if (error) {
-        console.error(error);
-      } else {
-        console.log("URL da imagem:", data);
-        setImages([data.image_url, ...data.variations_url]);
-      }
-    }
+  if (isLoading) {
+    return <span>...Loading</span>;
+  }
 
-    fetchImage();
-  }, [id]);
+  if (!generation) {
+    return <span>error getting images</span>;
+  }
 
   return (
     <div>
-      <DisplayImages imageUrls={images} />
+      <DisplayImages
+        imageUrls={[generation.image_url, ...generation.variations_url]}
+      />
     </div>
   );
 }
