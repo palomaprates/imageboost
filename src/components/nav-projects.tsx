@@ -19,7 +19,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
-import type { HistoryItem } from "./app-sidebar";
+import type { HistoryItem } from "./Page";
 
 type NavProjectsProps = {
   history: HistoryItem[];
@@ -42,12 +42,12 @@ export function NavProjects({ history }: NavProjectsProps) {
               >
                 <SidebarMenuButton>
                   <img
-                    src={item.image || "fallback.png"}
+                    src={item.image_url || "fallback.png"}
                     width={30}
                     height={30}
                     alt="thumbnail"
                   />
-                  <span>{item.description}</span>
+                  <span>Histórico</span>
                 </SidebarMenuButton>
               </Link>
               <DropdownMenu>

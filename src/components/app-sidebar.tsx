@@ -17,6 +17,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import type { HistoryItem } from "./Page";
 
 const data = {
   user: {
@@ -43,11 +44,6 @@ const data = {
   ],
 };
 
-export type HistoryItem = {
-  id: number | string;
-  description: string;
-  image: string;
-};
 interface AppSidebarProps
   extends React.ComponentPropsWithoutRef<typeof Sidebar> {
   history: HistoryItem[];

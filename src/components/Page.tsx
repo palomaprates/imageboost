@@ -13,33 +13,36 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useEffect, useState } from "react";
 import { supabase } from "@/services/supabaseClient";
 import { Outlet } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 
+export type HistoryItem = {
+  id: number;
+  image_url: string;
+};
+async function fetchHistory(): Promise<HistoryItem[]> {
+  const { data, error } = await supabase
+    .from("images")
+    .select("id, image_url")
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(error.message);
+
+  return data;
+}
 export default function Page() {
-  const [history, setHistory] = useState<
-    { id: number; description: string; image: string }[]
-  >([]);
-
-  async function fetchHistory() {
-    const { data, error } = await supabase
-      .from("images")
-      .select("id, image_url")
-      .order("created_at", { ascending: false });
-    if (data) {
-      setHistory(
-        data.map((item) => ({
-          id: item.id,
-          description: `Histórico`,
-          image: item.image_url,
-        }))
-      );
-    }
+  const { data: history = [], isLoading } = useQuery<HistoryItem[]>({
+    queryKey: ["history"],
+    queryFn: () => fetchHistory(),
+    staleTime: Infinity,
+  });
+  if (isLoading) {
+    return <span>...Loading</span>;
   }
-  useEffect(() => {
-    fetchHistory();
-  }, []);
+
+  if (!history) {
+    return <span>error getting images</span>;
+  }
 
   return (
     <SidebarProvider>
