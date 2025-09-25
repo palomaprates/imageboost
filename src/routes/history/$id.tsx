@@ -1,7 +1,7 @@
 import DisplayImages from "@/components/DisplayImages";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { fetchImage } from "@/components/Generation";
+import { fetchImage } from "@/components/utils/fetchImage";
 
 export const Route = createFileRoute("/history/$id")({
   component: HistoryRoute,
