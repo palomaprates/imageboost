@@ -1,8 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
@@ -28,9 +26,6 @@ export default function Page() {
             />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">ImageBoost</BreadcrumbLink>
-                </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
               </BreadcrumbList>
             </Breadcrumb>

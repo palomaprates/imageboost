@@ -9,7 +9,6 @@ import {
 
 import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -49,9 +48,7 @@ interface AppSidebarProps
 export function AppSidebar({ ...props }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
-      </SidebarHeader>
+      <SidebarHeader>logo aqui</SidebarHeader>
       <SidebarContent>
         <NavProjects />
       </SidebarContent>
