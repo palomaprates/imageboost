@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { supabase } from "../services/supabaseClient";
 import DisplayImages from "./DisplayImages";
+import { useQueryClient } from "@tanstack/react-query";
+import { HISTORY_KEY } from "./utils/fetchHistory";
 
 function toBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -21,6 +23,7 @@ export default function ImageEditor() {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imageUrls, setImageUrls] = useState<string[] | null>(null);
+  const queryClient = useQueryClient();
 
   const handleUpload = async function uploadImage() {
     if (!image) {
@@ -43,6 +46,9 @@ export default function ImageEditor() {
       if (error) {
         throw new Error("Erro na requisição");
       }
+
+      queryClient.refetchQueries({ queryKey: [HISTORY_KEY] });
+
       setImageUrls([data.original, ...(data.variations || [])]);
       console.log("image no front", data.original);
     } catch (e) {
