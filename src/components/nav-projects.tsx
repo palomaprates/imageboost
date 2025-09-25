@@ -19,14 +19,29 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
-import type { HistoryItem } from "./Page";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchHistory,
+  HISTORY_KEY,
+  type HistoryItem,
+} from "./utils/fetchHistory";
 
-type NavProjectsProps = {
-  history: HistoryItem[];
-};
-
-export function NavProjects({ history }: NavProjectsProps) {
+export function NavProjects() {
   const { isMobile } = useSidebar();
+
+  const { data: history = [], isLoading } = useQuery<HistoryItem[]>({
+    queryKey: [HISTORY_KEY],
+    queryFn: () => fetchHistory(),
+    staleTime: Infinity,
+  });
+
+  if (isLoading) {
+    return <span>...Loading</span>;
+  }
+
+  if (!history) {
+    return <span>error getting images</span>;
+  }
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">

@@ -17,7 +17,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import type { HistoryItem } from "./Page";
 
 const data = {
   user: {
@@ -45,18 +44,16 @@ const data = {
 };
 
 interface AppSidebarProps
-  extends React.ComponentPropsWithoutRef<typeof Sidebar> {
-  history: HistoryItem[];
-}
+  extends React.ComponentPropsWithoutRef<typeof Sidebar> {}
 
-export function AppSidebar({ history, ...props }: AppSidebarProps) {
+export function AppSidebar({ ...props }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavProjects history={history} />
+        <NavProjects />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
