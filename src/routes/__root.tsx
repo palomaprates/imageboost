@@ -13,12 +13,3 @@ export const Route = createRootRoute({
     };
   },
 });
-
-// function RootComponent() {
-//   return (
-//     <React.Fragment>
-//       <Page />
-//       {/* <Outlet /> */}
-//     </React.Fragment>
-//   );
-// }
