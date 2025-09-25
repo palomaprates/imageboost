@@ -25,6 +25,7 @@ import {
   HISTORY_KEY,
   type HistoryItem,
 } from "./utils/fetchHistory";
+import { AiOutlinePlusSquare } from "react-icons/ai";
 
 export function NavProjects() {
   const { isMobile } = useSidebar();
@@ -45,6 +46,11 @@ export function NavProjects() {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      <SidebarGroupLabel>
+        <Link to="/" className="flex gap-1 items-center cursor-pointer">
+          <AiOutlinePlusSquare /> Editar nova imagem
+        </Link>
+      </SidebarGroupLabel>
       <SidebarGroupLabel>Histórico</SidebarGroupLabel>
       <SidebarMenu>
         {Array.isArray(history) &&
@@ -62,7 +68,7 @@ export function NavProjects() {
                     height={30}
                     alt="thumbnail"
                   />
-                  <span>Histórico</span>
+                  <span className="font-light">Histórico</span>
                 </SidebarMenuButton>
               </Link>
               <DropdownMenu>
