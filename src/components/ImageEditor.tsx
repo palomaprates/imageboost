@@ -3,21 +3,7 @@ import { supabase } from "../services/supabaseClient";
 import DisplayImages from "./DisplayImages";
 import { useQueryClient } from "@tanstack/react-query";
 import { HISTORY_KEY } from "./utils/fetchHistory";
-
-function toBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      const base64 = reader.result as string;
-      resolve(base64);
-    };
-
-    reader.onerror = (error) => reject(error);
-
-    reader.readAsDataURL(file);
-  });
-}
+import toBase64 from "./utils/toBase64";
 
 export default function ImageEditor() {
   const [loading, setLoading] = useState(false);
@@ -59,18 +45,21 @@ export default function ImageEditor() {
 
   return (
     <div className="p-4 max-w-md mx-auto">
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) =>
-          setImage(
-            e.target.files && e.target.files[0] ? e.target.files[0] : null
-          )
-        }
-      />
+      <div className="flex items-center justify-center p-1">
+        <input
+          className="font-light"
+          type="file"
+          accept="image/*"
+          onChange={(e) =>
+            setImage(
+              e.target.files && e.target.files[0] ? e.target.files[0] : null
+            )
+          }
+        />
+      </div>
       <button
         onClick={handleUpload}
-        className="mt-2 p-2 w-full bg-blue-500 text-white rounded"
+        className="mt-2 p-2 w-full  bg-gray-500 text-white rounded"
         disabled={loading}
       >
         {loading ? "Carregando..." : "Enviar"}
