@@ -13,7 +13,6 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
 
@@ -48,7 +47,6 @@ interface AppSidebarProps
 export function AppSidebar({ ...props }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>logo aqui</SidebarHeader>
       <SidebarContent>
         <NavProjects />
       </SidebarContent>
