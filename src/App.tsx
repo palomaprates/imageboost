@@ -16,7 +16,7 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <div className="w-screen h-screen">
+        <div className="w-screen h-screen bg-gradient-to-r from-yellow-100 via-orange-200 to-red-300 ">
           <RouterProvider router={router} />
         </div>
         <ReactQueryDevtools initialIsOpen={false} />

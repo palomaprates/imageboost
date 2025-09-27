@@ -64,11 +64,10 @@ export default function ImageEditor() {
   };
 
   return (
-    <div className="w-full gap-4 flex flex-col justify-center items-center">
-      {/* <div> */}
+    <div className="w-full flex gap-4 flex-col justify-center items-center">
       <div
-        className={`flex w-full h-70 flex-col items-center justify-center border-2 border-dashed rounded-sm p-10 transition 
-        ${dragActive ? "border-blue-500 bg-blue-50" : "border-gray-400 bg-white"}`}
+        className={`flex w-full h-70 flex-col items-center justify-center border-2 border-dashed rounded-xl p-10 transition 
+        ${dragActive ? "border-blue-500 bg-blue-50" : "border-red-600 "}`}
         onDragOver={(e) => {
           e.preventDefault();
           setDragActive(true);
@@ -99,12 +98,12 @@ export default function ImageEditor() {
         />
         <label
           htmlFor="fileInput"
-          className="flex items-center gap-2 bg-gray-500 hover:bg-gray-700 text-white font-light px-6 py-3 rounded-sm cursor-pointer transition"
+          className="flex gap-2 items-center mt-8 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl shadow-lg transition"
         >
           <LuImagePlus />
           Selecione sua imagem
         </label>
-        <p className="text-gray-900 mt-4 font-light">Ou arraste aqui</p>
+        <p className="text-red-600 mt-4 font-semibold">Ou arraste aqui</p>
       </div>
       {preview && (
         <FileDetails
@@ -117,13 +116,16 @@ export default function ImageEditor() {
 
       <button
         onClick={handleUpload}
-        className="p-2 w-full bg-gray-900 text-white rounded-sm cursor-pointer font-light"
+        className="mb-8 w-full bg-white hover:bg-gray-100 text-red-600
+                     font-semibold rounded-xl px-4 sm:px-6 py-3 shadow-md transition"
         disabled={loading || !image}
       >
         {loading ? "Carregando..." : "Enviar"}
       </button>
-      {/* </div> */}
-      {/* <DisplayImages imageUrls={imageUrls} /> */}
     </div>
+
+    /* </div> */
+    /* <DisplayImages imageUrls={imageUrls} /> */
+    // </div>
   );
 }

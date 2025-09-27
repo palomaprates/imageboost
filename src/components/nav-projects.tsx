@@ -51,24 +51,25 @@ export function NavProjects() {
           <AiOutlinePlusSquare /> Editar nova imagem
         </Link>
       </SidebarGroupLabel>
-      <SidebarGroupLabel>Histórico</SidebarGroupLabel>
+      <SidebarGroupLabel className="text-lg font-semibold text-gray-800 mb-4">
+        Histórico
+      </SidebarGroupLabel>
       <SidebarMenu>
         {Array.isArray(history) &&
           history.map((item) => (
-            <SidebarMenuItem key={item.id}>
+            <SidebarMenuItem key={item.id} className="space-y-3">
               <Link
                 key={item.id}
                 to="/history/$id"
                 params={{ id: String(item.id) }}
               >
-                <SidebarMenuButton>
+                <SidebarMenuButton className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition cursor-pointer">
                   <img
                     src={item.image_url || "fallback.png"}
-                    width={30}
-                    height={30}
+                    className="w-10 h-10 rounded-md object-cover"
                     alt="thumbnail"
                   />
-                  <span className="font-light">Histórico</span>
+                  <span className="text-gray-700 font-medium">Histórico</span>
                 </SidebarMenuButton>
               </Link>
               <DropdownMenu>
