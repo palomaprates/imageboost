@@ -1,14 +1,16 @@
-import { LuDownload, LuPencil, LuX } from "react-icons/lu";
+import { LuX } from "react-icons/lu";
 
 interface FileDetailsProps {
   preview: string;
   fileName: string;
   fileSize: number;
+  onRemove: () => void;
 }
 export default function FileDetails({
   preview,
   fileName,
   fileSize,
+  onRemove,
 }: FileDetailsProps) {
   const fileSizeKB = (fileSize / 1024).toFixed(2);
   return (
@@ -25,13 +27,10 @@ export default function FileDetails({
         </div>
       </div>
       <div className="flex items-center space-x-2">
-        <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition">
-          <LuDownload size={20} />
-        </button>
-        <button className="p-2 border border-gray-300 rounded-full hover:bg-gray-100 transition">
-          <LuPencil size={20} />
-        </button>
-        <button className="p-2 border border-gray-300 rounded-full hover:bg-red-500 hover:text-white transition">
+        <button
+          onClick={onRemove}
+          className="p-2 border border-gray-300 rounded-full hover:bg-red-500 hover:text-white transition cursor-pointer"
+        >
           <LuX size={20} />
         </button>
       </div>
