@@ -14,7 +14,7 @@ export default function FileDetails({
 }: FileDetailsProps) {
   const fileSizeKB = (fileSize / 1024).toFixed(2);
   return (
-    <div className="flex items-center justify-between p-2 border border-gray-300 rounded-md">
+    <div className="flex w-full items-center justify-between p-2 border border-gray-300 rounded-md">
       <div className="flex items-center space-x-4">
         <img
           src={preview}
