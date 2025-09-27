@@ -13,7 +13,6 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarRail,
 } from "@/components/ui/sidebar";
 
 const data = {
@@ -53,7 +52,6 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   );
 }
