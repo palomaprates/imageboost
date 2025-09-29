@@ -19,11 +19,13 @@ export default function FileDetails({
         <img
           src={preview}
           alt="preview"
-          className="w-12 h-12 rounded-sm object-cover"
+          className="w-12 h-12 rounded-md object-cover"
         />
         <div>
-          <p className="font-light text-gray-800">{fileName}</p>
-          <p className="text-sm font-light text-gray-500">{fileSizeKB} KB</p>
+          <p className="font-extralight text-gray-800">{fileName}</p>
+          <p className="text-sm font-extralight text-gray-500">
+            {fileSizeKB} KB
+          </p>
         </div>
       </div>
       <div className="flex items-center space-x-2">
