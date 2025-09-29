@@ -98,12 +98,14 @@ export default function ImageEditor() {
         />
         <label
           htmlFor="fileInput"
-          className="flex gap-2 items-center mt-8 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl shadow-lg transition"
+          className="flex gap-2 items-center mt-8 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl shadow-lg transition cursor-pointer"
         >
           <LuImagePlus />
           Selecione sua imagem
         </label>
-        <p className="text-red-600 mt-4 font-semibold">Ou arraste aqui</p>
+        <p className="text-red-600 mt-4 font-semibold select-none">
+          Ou arraste aqui
+        </p>
       </div>
       {preview && (
         <FileDetails
