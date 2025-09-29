@@ -47,11 +47,14 @@ export function NavProjects() {
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>
-        <Link to="/" className="flex gap-1 items-center cursor-pointer">
+        <Link
+          to="/"
+          className="flex gap-1 items-center cursor-pointer font-montserrat"
+        >
           <AiOutlinePlusSquare /> Editar nova imagem
         </Link>
       </SidebarGroupLabel>
-      <SidebarGroupLabel className="text-lg font-semibold text-gray-800 mb-4">
+      <SidebarGroupLabel className="text-lg font-montserrat text-gray-800 mb-4">
         Histórico
       </SidebarGroupLabel>
       <SidebarMenu>
@@ -69,7 +72,9 @@ export function NavProjects() {
                     className="w-10 h-10 rounded-md object-cover"
                     alt="thumbnail"
                   />
-                  <span className="text-gray-700 font-medium">Histórico</span>
+                  <span className="text-gray-700 font-montserrat">
+                    Histórico
+                  </span>
                 </SidebarMenuButton>
               </Link>
               <DropdownMenu>
