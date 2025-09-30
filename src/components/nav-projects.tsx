@@ -19,17 +19,18 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   fetchHistory,
   HISTORY_KEY,
   type HistoryItem,
 } from "./utils/fetchHistory";
 import { AiOutlinePlusSquare } from "react-icons/ai";
+import { deleteHistoryItem } from "./utils/deleteHistoryItem";
 
 export function NavProjects() {
+  const queryClient = useQueryClient();
   const { isMobile } = useSidebar();
-
   const { data: history = [], isLoading } = useQuery<HistoryItem[]>({
     queryKey: [HISTORY_KEY],
     queryFn: () => fetchHistory(),
@@ -43,20 +44,29 @@ export function NavProjects() {
   if (!history) {
     return <span>error getting images</span>;
   }
-
+  async function handleDelete(id: number) {
+    try {
+      await deleteHistoryItem(id);
+      await queryClient.invalidateQueries({ queryKey: [HISTORY_KEY] });
+    } catch (error) {
+      console.error("Erro ao deletar", error);
+    }
+  }
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>
-        <Link
-          to="/"
-          className="flex gap-1 items-center cursor-pointer font-montserrat"
-        >
-          <AiOutlinePlusSquare /> Editar nova imagem
-        </Link>
-      </SidebarGroupLabel>
-      <SidebarGroupLabel className="text-lg font-montserrat text-gray-800 mb-4">
-        Histórico
-      </SidebarGroupLabel>
+      <div className="flex flex-col gap-2">
+        <SidebarGroupLabel>
+          <Link
+            to="/"
+            className="flex gap-1 items-center cursor-pointer font-montserrat text-xs mt-1"
+          >
+            <AiOutlinePlusSquare className="text-lg" /> Nova imagem
+          </Link>
+        </SidebarGroupLabel>
+        <SidebarGroupLabel className="text-xs font-montserrat text-gray-800 mb-2">
+          Histórico
+        </SidebarGroupLabel>
+      </div>
       <SidebarMenu>
         {Array.isArray(history) &&
           history.map((item) => (
@@ -66,19 +76,19 @@ export function NavProjects() {
                 to="/history/$id"
                 params={{ id: String(item.id) }}
               >
-                <SidebarMenuButton className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition cursor-pointer">
+                <SidebarMenuButton className="flex items-center space-x-1 p-2 rounded-lg hover:bg-gray-100 transition cursor-pointer">
                   <img
                     src={item.image_url || "fallback.png"}
-                    className="w-10 h-10 rounded-md object-cover"
+                    className="w-7 h-7 rounded-md object-cover"
                     alt="thumbnail"
                   />
-                  <span className="text-gray-700 font-montserrat">
+                  <span className="text-gray-500 font-montserrat text-xs">
                     Histórico
                   </span>
                 </SidebarMenuButton>
               </Link>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger asChild className="text-gray-600">
                   <SidebarMenuAction showOnHover>
                     <MoreHorizontal />
                   </SidebarMenuAction>
@@ -95,8 +105,8 @@ export function NavProjects() {
                     <Forward className="text-muted-foreground" />
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Trash2 className="text-muted-foreground" />
+                  <DropdownMenuItem onClick={() => handleDelete(item.id)}>
+                    <Trash2 className="text-muted-foreground cursor-pointer" />
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
