@@ -1,4 +1,4 @@
-import Logo from "./Logo";
+import { LuMenu } from "react-icons/lu";
 import { useSidebar } from "./ui/sidebar";
 
 export default function SidebarButton() {
@@ -6,7 +6,7 @@ export default function SidebarButton() {
 
   return (
     <div onClick={toggleSidebar}>
-      <Logo />
+      <LuMenu className="w-6 h-6" />
     </div>
   );
 }
