@@ -42,7 +42,7 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-gradient-to-r from-orange-200 via-yellow-100 to-yellow-100-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-gradient-to-r from-purple-100/40 via-purple-100 to-[#e8dbf6]/30-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
