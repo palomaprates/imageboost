@@ -64,7 +64,7 @@ Deno.serve(async (req) => {
     );
     //para teste
     const generatedUrls = [originalUrl, originalUrl];
-
+    const index = 0;
     const { error: dbError } = await supabase
       .from("images")
       .insert([
@@ -72,6 +72,7 @@ Deno.serve(async (req) => {
           user_id,
           image_url: originalUrl,
           variations_url: generatedUrls,
+          description: `Histórico ${index + 1}`,
         },
       ])
       .select();
