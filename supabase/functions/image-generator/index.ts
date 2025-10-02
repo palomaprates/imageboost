@@ -64,18 +64,17 @@ Deno.serve(async (req) => {
     );
     //para teste
     const generatedUrls = [originalUrl, originalUrl];
-    const index = 0;
-    const { error: dbError } = await supabase
+    const { data: inserted, error: dbError } = await supabase
       .from("images")
       .insert([
         {
           user_id,
           image_url: originalUrl,
           variations_url: generatedUrls,
-          description: `Histórico ${index + 1}`,
+          description: `Histórico ${Date.now()}`,
         },
       ])
-      .select();
+      .select().single();
 
     if (dbError) {
       console.error("Erro ao salvar no banco:", dbError);
@@ -86,8 +85,11 @@ Deno.serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ original: originalUrl, variations: generatedUrls }),
-      { headers: { "Content-Type": "application/json", ...corsHeaders } },
+      JSON.stringify(inserted),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      },
     );
   } catch (e) {
     console.error("error", e);

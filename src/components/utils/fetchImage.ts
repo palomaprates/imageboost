@@ -1,11 +1,5 @@
 import { supabase } from "@/services/supabaseClient";
-
-export type Generation = {
-  created_at: string;
-  id: string;
-  image_url: string;
-  variations_url: string[];
-};
+import type { Generation } from "../ImageEditor";
 
 export async function fetchImage(id: string): Promise<Generation> {
   const { data, error } = await supabase

@@ -1,19 +1,28 @@
 import { useState } from "react";
 import { supabase } from "../services/supabaseClient";
-// import DisplayImages from "./DisplayImages";
 import { useQueryClient } from "@tanstack/react-query";
 import { HISTORY_KEY } from "./utils/fetchHistory";
 import toBase64 from "./utils/toBase64";
 import { LuImagePlus } from "react-icons/lu";
 import FileDetails from "./FileDetails";
+import { useNavigate } from "@tanstack/react-router";
+
+export type Generation = {
+  id: string;
+  image_url: string;
+  variations_url: string[];
+  description: string;
+  user_id: string;
+  created_at: string;
+};
 
 export default function ImageEditor() {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
-  const [imageUrls, setImageUrls] = useState<string[] | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const handleFile = (file: File) => {
     console.log("handleFile:", file.name, file.type, file.size);
@@ -27,10 +36,12 @@ export default function ImageEditor() {
     setImage(file);
     setPreview(URL.createObjectURL(file));
   };
+
   const handleRemove = () => {
     setImage(null);
     setPreview(null);
   };
+
   const handleUpload = async function uploadImage() {
     if (!image) {
       alert("selecione uma imagem");
@@ -39,7 +50,7 @@ export default function ImageEditor() {
     setLoading(true);
     try {
       const imageb64 = await toBase64(image);
-      const { data, error } = await supabase.functions.invoke(
+      const { data, error } = await supabase.functions.invoke<Generation>(
         "image-generator",
         {
           body: {
@@ -52,11 +63,9 @@ export default function ImageEditor() {
       if (error) {
         throw new Error("Erro na requisição");
       }
-
-      queryClient.refetchQueries({ queryKey: [HISTORY_KEY] });
-
-      setImageUrls([data.original, ...(data.variations || [])]);
-      console.log("image no front", data.original);
+      if (!data?.id) throw new Error("Missing ID from generated image");
+      await queryClient.refetchQueries({ queryKey: [HISTORY_KEY] });
+      navigate({ to: "/history/$id", params: { id: data.id } });
     } catch (e) {
       alert("error");
     }
@@ -125,9 +134,5 @@ export default function ImageEditor() {
         {loading ? "Carregando..." : "Enviar"}
       </button>
     </div>
-
-    /* </div> */
-    /* <DisplayImages imageUrls={imageUrls} /> */
-    // </div>
   );
 }
