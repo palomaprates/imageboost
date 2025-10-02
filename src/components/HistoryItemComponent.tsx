@@ -27,9 +27,10 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
   const { isMobile } = useSidebar();
 
   const handleSave = async () => {
-    if (!spanRef.current) return;
-    const newValue = spanRef.current.innerText.trim();
-
+    const newValue = spanRef.current?.innerText.trim() || "";
+    if (newValue === "") {
+      spanRef.current!.innerText = item.description;
+    }
     if (newValue !== item.description) {
       try {
         await updateDescription(item.id, newValue);
@@ -44,6 +45,14 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
       e.preventDefault();
       spanRef.current?.blur();
       handleSave();
+    } else if (e.key === " ") {
+      if (document.activeElement === spanRef.current) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.execCommand("insertText", false, " ");
+      }
+    } else {
+      e.stopPropagation();
     }
   };
   async function handleDelete(id: number) {
@@ -69,6 +78,7 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
             ref={spanRef}
             onBlur={handleSave}
             onKeyDown={handleKeyDown}
+            onMouseDown={(e) => e.stopPropagation()}
             className="font-montserrat text-xs"
           >
             {item.description}
