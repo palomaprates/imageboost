@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   SidebarMenuAction,
   SidebarMenuButton,
@@ -25,8 +25,10 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
   const queryClient = useQueryClient();
   const spanRef = useRef<HTMLSpanElement>(null);
   const { isMobile } = useSidebar();
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleSave = async () => {
+    setIsEditing(false);
     const newValue = spanRef.current?.innerText.trim() || "";
     if (newValue === "") {
       spanRef.current!.innerText = item.description;
@@ -41,6 +43,7 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
     }
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLSpanElement>) => {
+    if (!isEditing) return;
     if (e.key === "Enter") {
       e.preventDefault();
       spanRef.current?.blur();
@@ -73,13 +76,14 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
             alt="thumbnail"
           />
           <span
-            contentEditable
+            contentEditable={isEditing}
             suppressContentEditableWarning
             ref={spanRef}
             onBlur={handleSave}
             onKeyDown={handleKeyDown}
             onMouseDown={(e) => e.stopPropagation()}
-            className="font-montserrat text-xs"
+            className={`font-montserrat text-xs ${isEditing ? "border border-purple-400 rounded px-1" : ""}`}
+            tabIndex={isEditing ? 0 : -1}
           >
             {item.description}
           </span>
@@ -99,7 +103,7 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
           <DropdownMenuItem
             className="cursor-pointer"
             onClick={() => {
-              // console.log("focado");
+              setIsEditing(true);
               setTimeout(() => {
                 if (!spanRef.current) return;
                 spanRef.current.focus();
