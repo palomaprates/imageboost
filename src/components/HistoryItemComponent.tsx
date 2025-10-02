@@ -107,6 +107,11 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
               setTimeout(() => {
                 if (!spanRef.current) return;
                 spanRef.current.focus();
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(spanRef.current);
+                selection?.removeAllRanges();
+                selection?.addRange(range);
               }, 300);
             }}
           >
