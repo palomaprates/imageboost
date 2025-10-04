@@ -45,7 +45,7 @@ interface AppSidebarProps
 
 export function AppSidebar({ ...props }: AppSidebarProps) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar {...props}>
       <SidebarContent>
         <NavProjects />
       </SidebarContent>
