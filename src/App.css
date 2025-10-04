@@ -40,10 +40,16 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+html,
 body {
+  height: 100%;
   overflow: hidden;
 }
-
+#root,
+.main-content {
+  height: 100%;
+  overflow: auto;
+}
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
