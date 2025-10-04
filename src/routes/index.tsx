@@ -8,8 +8,8 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
   return (
-    <div className="flex items-center justify-center min-h-dvh w-full mx-auto px-7 sm:px-12 max-w-[700px] overflow-y-auto!">
-      <div className="flex flex-col items-center justify-center w-full mx-auto">
+    <div className="flex items-center justify-center w-full mx-auto my-auto px-7 sm:px-12 max-w-[700px]">
+      <div className="flex flex-col items-center justify-center w-full mx-auto my-auto">
         <Slogan />
         <ImageEditor />
       </div>
