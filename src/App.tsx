@@ -16,7 +16,7 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <div className="w-screen h-screen bg-gradient-to-r from-purple-100/40 via-purple-100 to-[#e8dbf6]/30">
+        <div className="w-screen min-h-full bg-gradient-to-r from-purple-100/40 via-purple-100 to-[#e8dbf6]/30">
           <RouterProvider router={router} />
         </div>
         <ReactQueryDevtools initialIsOpen={false} />
