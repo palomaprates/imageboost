@@ -26,7 +26,7 @@ function HistoryRoute() {
   }
 
   return (
-    <div>
+    <div className="my-auto mx-auto">
       <DisplayImages
         imageUrls={[generation.image_url, ...generation.variations_url]}
       />
