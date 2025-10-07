@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ImageDownloadButton } from "./ImageDownloadButton";
 
 export default function VariationsCarousel({
   imageUrls,
@@ -22,14 +23,20 @@ export default function VariationsCarousel({
     <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
       <div
         className="w-full max-w-sm overflow-hidden rounded-3xl relative"
-        onTouchStart={(e) =>
-          (e.currentTarget.dataset.touchStart = e.touches[0].clientX.toString())
-        }
+        onTouchStart={(e) => {
+          const target = e.target as HTMLElement;
+          if (target.closest("button")) return;
+
+          e.currentTarget.dataset.touchStart = e.touches[0].clientX.toString();
+        }}
         onTouchEnd={(e) => {
+          const target = e.target as HTMLElement;
+          if (target.closest("button")) return;
           const touchStart = parseFloat(
             e.currentTarget.dataset.touchStart || "0"
           );
           const touchEnd = e.changedTouches[0].clientX;
+
           if (touchStart - touchEnd > 50) handleSwipe("left");
           if (touchEnd - touchStart > 50) handleSwipe("right");
         }}
@@ -39,7 +46,12 @@ export default function VariationsCarousel({
           alt={`Variação ${currentIndex + 1}`}
           className="w-full h-96 object-cover rounded-3xl transition-all duration-500 ease-in-out"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent rounded-3xl" />
+        <ImageDownloadButton
+          imageUrl={variations[currentIndex]}
+          className="pointer-events-auto"
+        />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent rounded-3xl pointer-events-none" />
         <div className="absolute bottom-4 left-4 flex items-center gap-3 bg-black/60 backdrop-blur-sm p-2 pr-4 rounded-xl">
           <img
             src={imageUrls[0]}

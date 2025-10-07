@@ -1,5 +1,6 @@
 import { useIsMobile } from "@/hooks/use-mobile";
 import DisplayImagesMobile from "./DisplayImagesMobile";
+import { ImageDownloadButton } from "./ImageDownloadButton";
 
 export default function DisplayImages({
   imageUrls,
@@ -8,7 +9,6 @@ export default function DisplayImages({
 }) {
   if (!imageUrls || imageUrls.length < 3) return null;
   const isMobile = useIsMobile();
-
   const variations = imageUrls.slice(1);
 
   return isMobile ? (
@@ -19,13 +19,14 @@ export default function DisplayImages({
         {variations.map((variationUrl, index) => (
           <div
             key={index}
-            className="relative rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.5)] max-w-sm"
+            className="flex relative w-96 h-96 rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.5)] max-w-sm"
           >
             <img
               src={variationUrl}
               alt={`Variação ${index + 1}`}
-              className="w-80 h-80 object-cover"
+              className="w-full h-full object-cover"
             />
+            <ImageDownloadButton imageUrl={variationUrl} />
             <div className="absolute bottom-4 left-4 flex items-center gap-3 bg-black/60 backdrop-blur-sm p-2 pr-4 rounded-xl">
               <img
                 src={imageUrls[0]}
