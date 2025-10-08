@@ -1,5 +1,5 @@
 import { Download } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 interface DownloadButtonProps {
   imageUrl: string;
@@ -11,7 +11,6 @@ export function ImageDownloadButton({
   className,
 }: DownloadButtonProps) {
   const [loading, setLoading] = useState(false);
-  const linkRef = useRef<HTMLAnchorElement>(null);
 
   const handleDownload = async () => {
     try {
@@ -20,12 +19,13 @@ export function ImageDownloadButton({
       const blob = await response.blob();
       const blobUrl = URL.createObjectURL(blob);
 
-      if (linkRef.current) {
-        linkRef.current.href = blobUrl;
-        linkRef.current.download = imageUrl.split("/").pop() || "imagem.jpg";
-        linkRef.current.click();
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
-      }
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = imageUrl.split("/").pop() || "imagem.jpg";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
       URL.revokeObjectURL(blobUrl);
     } catch (err) {
       console.error("Erro ao baixar imagem:", err);
@@ -35,31 +35,19 @@ export function ImageDownloadButton({
   };
 
   return (
-    <>
-      <a
-        ref={linkRef}
-        style={{ display: "none" }}
-        target="_blank"
-        rel="noopener noreferrer"
-      />
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          handleDownload();
-        }}
-        disabled={loading}
-        className={`
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        handleDownload();
+      }}
+      disabled={loading}
+      className={`
         absolute bottom-7 right-2 p-2 rounded-full bg-black/60 text-white
-        hover:bg-black/90 transition-all cursor-pointer
+        hover:bg-black/90 hover:scale-110 duration-300 transition-all cursor-pointer
         ${className || ""}`}
-        title="Baixar imagem"
-      >
-        {loading ? (
-          <span className="text-xs">...</span>
-        ) : (
-          <Download size={20} />
-        )}
-      </button>
-    </>
+      title="Baixar imagem"
+    >
+      {loading ? <span className="text-xs">...</span> : <Download size={20} />}
+    </button>
   );
 }
