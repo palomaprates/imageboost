@@ -23,6 +23,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { supabase } from "@/services/supabaseClient";
 
 export function NavUser({
   user,
@@ -35,6 +36,10 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
 
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    window.location.href = "/login";
+  }
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -97,7 +102,7 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <LogOut />
+              <LogOut onClick={handleLogout} />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
