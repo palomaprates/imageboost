@@ -18,13 +18,6 @@ function base64ToBytes(base64: string) {
   return bytes;
 }
 Deno.serve(async (req) => {
-  const { data, error } = await supabase
-    .from("users")
-    .select("*");
-
-  console.log("data", data);
-  console.log("error", error);
-
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
