@@ -13,6 +13,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as EditImageRouteImport } from './routes/editImage'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HistoryIdRouteImport } from './routes/history/$id'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -34,17 +35,24 @@ const HistoryIdRoute = HistoryIdRouteImport.update({
   path: '/history/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/editImage': typeof EditImageRoute
   '/login': typeof LoginRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/history/$id': typeof HistoryIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/editImage': typeof EditImageRoute
   '/login': typeof LoginRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/history/$id': typeof HistoryIdRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,28 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/editImage': typeof EditImageRoute
   '/login': typeof LoginRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/history/$id': typeof HistoryIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/editImage' | '/login' | '/history/$id'
+  fullPaths: '/' | '/editImage' | '/login' | '/auth/callback' | '/history/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/editImage' | '/login' | '/history/$id'
-  id: '__root__' | '/' | '/editImage' | '/login' | '/history/$id'
+  to: '/' | '/editImage' | '/login' | '/auth/callback' | '/history/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/editImage'
+    | '/login'
+    | '/auth/callback'
+    | '/history/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EditImageRoute: typeof EditImageRoute
   LoginRoute: typeof LoginRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   HistoryIdRoute: typeof HistoryIdRoute
 }
 
@@ -99,6 +115,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -106,6 +129,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EditImageRoute: EditImageRoute,
   LoginRoute: LoginRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   HistoryIdRoute: HistoryIdRoute,
 }
 export const routeTree = rootRouteImport
