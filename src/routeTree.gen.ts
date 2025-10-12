@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as EditImageRouteImport } from './routes/editImage'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HistoryIdRouteImport } from './routes/history/$id'
 
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EditImageRoute = EditImageRouteImport.update({
   id: '/editImage',
   path: '/editImage',
@@ -32,35 +38,46 @@ const HistoryIdRoute = HistoryIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/editImage': typeof EditImageRoute
+  '/login': typeof LoginRoute
   '/history/$id': typeof HistoryIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/editImage': typeof EditImageRoute
+  '/login': typeof LoginRoute
   '/history/$id': typeof HistoryIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/editImage': typeof EditImageRoute
+  '/login': typeof LoginRoute
   '/history/$id': typeof HistoryIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/editImage' | '/history/$id'
+  fullPaths: '/' | '/editImage' | '/login' | '/history/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/editImage' | '/history/$id'
-  id: '__root__' | '/' | '/editImage' | '/history/$id'
+  to: '/' | '/editImage' | '/login' | '/history/$id'
+  id: '__root__' | '/' | '/editImage' | '/login' | '/history/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EditImageRoute: typeof EditImageRoute
+  LoginRoute: typeof LoginRoute
   HistoryIdRoute: typeof HistoryIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/editImage': {
       id: '/editImage'
       path: '/editImage'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EditImageRoute: EditImageRoute,
+  LoginRoute: LoginRoute,
   HistoryIdRoute: HistoryIdRoute,
 }
 export const routeTree = rootRouteImport
