@@ -65,7 +65,7 @@ export default function ImageEditor() {
       }
       if (!data?.id) throw new Error("Missing ID from generated image");
       await queryClient.refetchQueries({ queryKey: [HISTORY_KEY] });
-      navigate({ to: "/history/$id", params: { id: data.id } });
+      navigate({ to: "/app/history/$id", params: { id: data.id } });
     } catch (e) {
       alert("error");
     }

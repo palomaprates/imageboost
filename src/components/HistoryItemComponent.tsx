@@ -68,7 +68,11 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
   }
   return (
     <SidebarMenuItem key={item.id} className="space-y-3">
-      <Link key={item.id} to="/history/$id" params={{ id: String(item.id) }}>
+      <Link
+        key={item.id}
+        to="/app/history/$id"
+        params={{ id: String(item.id) }}
+      >
         <SidebarMenuButton className="flex items-center space-x-1 p-2 rounded-lg hover:bg-gray-100 transition cursor-pointer">
           <img
             src={item.image_url || "fallback.png"}
