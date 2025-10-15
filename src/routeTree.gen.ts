@@ -13,6 +13,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppLoadPageRouteImport } from './routes/app/loadPage'
 import { Route as AppHistoryIdRouteImport } from './routes/app/history/$id'
 import { Route as AppAuthCallbackRouteImport } from './routes/app/auth/callback'
 
@@ -36,6 +37,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppLoadPageRoute = AppLoadPageRouteImport.update({
+  id: '/loadPage',
+  path: '/loadPage',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppHistoryIdRoute = AppHistoryIdRouteImport.update({
   id: '/history/$id',
   path: '/history/$id',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/app/loadPage': typeof AppLoadPageRoute
   '/app/': typeof AppIndexRoute
   '/app/auth/callback': typeof AppAuthCallbackRoute
   '/app/history/$id': typeof AppHistoryIdRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/app/loadPage': typeof AppLoadPageRoute
   '/app': typeof AppIndexRoute
   '/app/auth/callback': typeof AppAuthCallbackRoute
   '/app/history/$id': typeof AppHistoryIdRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/app/loadPage': typeof AppLoadPageRoute
   '/app/': typeof AppIndexRoute
   '/app/auth/callback': typeof AppAuthCallbackRoute
   '/app/history/$id': typeof AppHistoryIdRoute
@@ -77,16 +86,24 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/login'
+    | '/app/loadPage'
     | '/app/'
     | '/app/auth/callback'
     | '/app/history/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/app' | '/app/auth/callback' | '/app/history/$id'
+  to:
+    | '/'
+    | '/login'
+    | '/app/loadPage'
+    | '/app'
+    | '/app/auth/callback'
+    | '/app/history/$id'
   id:
     | '__root__'
     | '/'
     | '/app'
     | '/login'
+    | '/app/loadPage'
     | '/app/'
     | '/app/auth/callback'
     | '/app/history/$id'
@@ -128,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/loadPage': {
+      id: '/app/loadPage'
+      path: '/loadPage'
+      fullPath: '/app/loadPage'
+      preLoaderRoute: typeof AppLoadPageRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/history/$id': {
       id: '/app/history/$id'
       path: '/history/$id'
@@ -146,12 +170,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteRouteChildren {
+  AppLoadPageRoute: typeof AppLoadPageRoute
   AppIndexRoute: typeof AppIndexRoute
   AppAuthCallbackRoute: typeof AppAuthCallbackRoute
   AppHistoryIdRoute: typeof AppHistoryIdRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppLoadPageRoute: AppLoadPageRoute,
   AppIndexRoute: AppIndexRoute,
   AppAuthCallbackRoute: AppAuthCallbackRoute,
   AppHistoryIdRoute: AppHistoryIdRoute,
