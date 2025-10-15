@@ -14,7 +14,7 @@ function RouteComponent() {
   };
 
   return (
-    <div className="flex items-center justify-center w-full mx-auto my-auto px-7 sm:px-12 max-w-[700px]">
+    <div className="flex items-center justify-center w-full mx-auto my-auto px-7 sm:px-12 max-w-[700px] h-screen">
       <div className="flex flex-col items-center justify-center w-full mx-auto my-auto">
         <Slogan />
         <ImageCompare />
