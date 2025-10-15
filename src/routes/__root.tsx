@@ -1,15 +1,6 @@
-import * as React from "react";
-import { createRootRoute } from "@tanstack/react-router";
-import Page from "@/components/Page";
+import { Navigate, Outlet, createRootRoute } from "@tanstack/react-router";
 
 export const Route = createRootRoute({
-  component: Page,
-  context: () => {
-    return {
-      imageUrls: [] as string[],
-      setImageUrls: (() => {}) as React.Dispatch<
-        React.SetStateAction<string[]>
-      >,
-    };
-  },
+  component: () => <Outlet />,
+  notFoundComponent: () => <Navigate to="/" />,
 });

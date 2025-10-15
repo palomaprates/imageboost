@@ -1,6 +1,6 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import ImageCompare from "@/components/ImageCompare";
 import Slogan from "@/components/Slogan";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -8,9 +8,11 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
   const navigate = useNavigate();
+
   const handleNavigate = () => {
-    navigate({ to: "/editImage" });
+    navigate({ to: "/login" });
   };
+
   return (
     <div className="flex items-center justify-center w-full mx-auto my-auto px-7 sm:px-12 max-w-[700px]">
       <div className="flex flex-col items-center justify-center w-full mx-auto my-auto">
