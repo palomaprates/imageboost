@@ -1,0 +1,35 @@
+import DisplayImages from "@/components/DisplayImages";
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { fetchImage } from "@/components/utils/fetchImage";
+
+export const Route = createFileRoute("/app/history/$id")({
+  component: HistoryRoute,
+  validateSearch: (search: { url?: string }) => search,
+});
+
+function HistoryRoute() {
+  const { id } = Route.useParams();
+
+  const { data: generation, isLoading } = useQuery({
+    queryKey: ["generation", id],
+    queryFn: () => fetchImage(id),
+    staleTime: Infinity,
+  });
+
+  if (isLoading) {
+    return <span>...Loading</span>;
+  }
+
+  if (!generation) {
+    return <span>error getting images</span>;
+  }
+
+  return (
+    <div className="my-auto mx-auto">
+      <DisplayImages
+        imageUrls={[generation.image_url, ...generation.variations_url]}
+      />
+    </div>
+  );
+}
