@@ -49,6 +49,7 @@ export default function ImageEditor() {
     }
     setLoading(true);
     try {
+      navigate({ to: "/app/loadPage" });
       const imageb64 = await toBase64(image);
       const { data, error } = await supabase.functions.invoke<Generation>(
         "image-generator",
