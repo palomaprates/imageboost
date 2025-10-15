@@ -1,9 +1,9 @@
 import "./App.css";
 import { RouterProvider, Router } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthProvider } from "./context/AuthContext";
+import { routeTree } from "./routeTree.gen";
 
 const router = new Router({ routeTree });
 declare module "@tanstack/react-router" {

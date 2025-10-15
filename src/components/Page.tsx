@@ -1,8 +1,8 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { Outlet } from "@tanstack/react-router";
 import SidebarButton from "./SidebarButton";
 import Header from "./Header";
 import { AppSidebar } from "./app-sidebar";
+import { Outlet } from "@tanstack/react-router";
 
 export default function Page() {
   return (
