@@ -10,19 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as EditImageRouteImport } from './routes/editImage'
+import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as HistoryIdRouteImport } from './routes/history/$id'
-import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppHistoryIdRouteImport } from './routes/app/history/$id'
+import { Route as AppAuthCallbackRouteImport } from './routes/app/auth/callback'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EditImageRoute = EditImageRouteImport.update({
-  id: '/editImage',
-  path: '/editImage',
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -30,59 +31,71 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HistoryIdRoute = HistoryIdRouteImport.update({
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppHistoryIdRoute = AppHistoryIdRouteImport.update({
   id: '/history/$id',
   path: '/history/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRouteRoute,
 } as any)
-const AuthCallbackRoute = AuthCallbackRouteImport.update({
+const AppAuthCallbackRoute = AppAuthCallbackRouteImport.update({
   id: '/auth/callback',
   path: '/auth/callback',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/editImage': typeof EditImageRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/auth/callback': typeof AuthCallbackRoute
-  '/history/$id': typeof HistoryIdRoute
+  '/app/': typeof AppIndexRoute
+  '/app/auth/callback': typeof AppAuthCallbackRoute
+  '/app/history/$id': typeof AppHistoryIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/editImage': typeof EditImageRoute
   '/login': typeof LoginRoute
-  '/auth/callback': typeof AuthCallbackRoute
-  '/history/$id': typeof HistoryIdRoute
+  '/app': typeof AppIndexRoute
+  '/app/auth/callback': typeof AppAuthCallbackRoute
+  '/app/history/$id': typeof AppHistoryIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/editImage': typeof EditImageRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/auth/callback': typeof AuthCallbackRoute
-  '/history/$id': typeof HistoryIdRoute
+  '/app/': typeof AppIndexRoute
+  '/app/auth/callback': typeof AppAuthCallbackRoute
+  '/app/history/$id': typeof AppHistoryIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/editImage' | '/login' | '/auth/callback' | '/history/$id'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/login'
+    | '/app/'
+    | '/app/auth/callback'
+    | '/app/history/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/editImage' | '/login' | '/auth/callback' | '/history/$id'
+  to: '/' | '/login' | '/app' | '/app/auth/callback' | '/app/history/$id'
   id:
     | '__root__'
     | '/'
-    | '/editImage'
+    | '/app'
     | '/login'
-    | '/auth/callback'
-    | '/history/$id'
+    | '/app/'
+    | '/app/auth/callback'
+    | '/app/history/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  EditImageRoute: typeof EditImageRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
-  AuthCallbackRoute: typeof AuthCallbackRoute
-  HistoryIdRoute: typeof HistoryIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -94,11 +107,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/editImage': {
-      id: '/editImage'
-      path: '/editImage'
-      fullPath: '/editImage'
-      preLoaderRoute: typeof EditImageRouteImport
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -108,29 +121,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/history/$id': {
-      id: '/history/$id'
-      path: '/history/$id'
-      fullPath: '/history/$id'
-      preLoaderRoute: typeof HistoryIdRouteImport
-      parentRoute: typeof rootRouteImport
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
     }
-    '/auth/callback': {
-      id: '/auth/callback'
+    '/app/history/$id': {
+      id: '/app/history/$id'
+      path: '/history/$id'
+      fullPath: '/app/history/$id'
+      preLoaderRoute: typeof AppHistoryIdRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/auth/callback': {
+      id: '/app/auth/callback'
       path: '/auth/callback'
-      fullPath: '/auth/callback'
-      preLoaderRoute: typeof AuthCallbackRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/auth/callback'
+      preLoaderRoute: typeof AppAuthCallbackRouteImport
+      parentRoute: typeof AppRouteRoute
     }
   }
 }
 
+interface AppRouteRouteChildren {
+  AppIndexRoute: typeof AppIndexRoute
+  AppAuthCallbackRoute: typeof AppAuthCallbackRoute
+  AppHistoryIdRoute: typeof AppHistoryIdRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppIndexRoute: AppIndexRoute,
+  AppAuthCallbackRoute: AppAuthCallbackRoute,
+  AppHistoryIdRoute: AppHistoryIdRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  EditImageRoute: EditImageRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
   LoginRoute: LoginRoute,
-  AuthCallbackRoute: AuthCallbackRoute,
-  HistoryIdRoute: HistoryIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
