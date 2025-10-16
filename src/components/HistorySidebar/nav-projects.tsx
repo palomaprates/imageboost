@@ -31,7 +31,7 @@ export function NavProjects() {
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <div className="flex flex-col gap-2">
-        <SidebarGroupLabel className="flex h-10 items-center space-x-1 p-2 rounded-lg hover:bg-gray-100 transition cursor-pointer font-montserrat">
+        <SidebarGroupLabel className="flex h-10 mt-4 items-center space-x-1 p-2 rounded-lg hover:bg-gray-100 transition cursor-pointer font-montserrat">
           <Link to="/app" className="flex gap-1">
             <AiOutlinePlusSquare className="text-lg " /> Nova imagem
           </Link>

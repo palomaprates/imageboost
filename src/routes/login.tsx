@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/services/supabaseClient";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/context/AuthContext";
+import { FcGoogle } from "react-icons/fc";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -34,7 +35,9 @@ function LoginPage() {
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle>Login</CardTitle>
+          <CardTitle className="flex items-center justify-center">
+            Inicie sessão
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Button
@@ -42,7 +45,10 @@ function LoginPage() {
             onClick={handleGoogleLogin}
             className="w-full"
           >
-            Entrar com Google
+            <FcGoogle />
+            <p className="flex max-w-full font-bold p-10">
+              Continuar com Google
+            </p>
           </Button>
         </CardContent>
       </Card>

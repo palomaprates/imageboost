@@ -3,8 +3,8 @@ import {
   ReactCompareSliderImage,
 } from "react-compare-slider";
 //temporary images
-import GeneratedImage from "../assets/Generated_Image.png";
-import OriginalImage from "../assets/Original_Image.jpg";
+import GeneratedImage from "../../assets/Generated_Image.png";
+import OriginalImage from "../../assets/Original_Image.jpg";
 
 export default function ImageCompare() {
   return (
