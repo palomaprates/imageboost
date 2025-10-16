@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import ImageCompare from "@/components/ImageCompare";
-import Slogan from "@/components/Slogan";
+import ImageCompare from "@/components/ImageComponents/ImageCompare";
+import Slogan from "@/components/PageComponents/Slogan";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
