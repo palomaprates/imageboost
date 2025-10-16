@@ -1,6 +1,6 @@
 export default function Slogan() {
   return (
-    <div className="w-full text-center">
+    <div className="w-full text-center select-none">
       <h1 className="font-montserrat text-4xl  text-gray-900 mb-3">
         Seu cardápio mais profissional
         <br /> sua marca mais forte

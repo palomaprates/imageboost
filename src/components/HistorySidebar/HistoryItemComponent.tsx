@@ -4,7 +4,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "./ui/sidebar";
+} from "../ui/sidebar";
 import { Link } from "@tanstack/react-router";
 
 import {
@@ -13,13 +13,13 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import { MoreHorizontal, Trash2 } from "lucide-react";
 import { TbPencil } from "react-icons/tb";
-import { deleteHistoryItem } from "./utils/deleteHistoryItem";
+import { deleteHistoryItem } from "../utils/deleteHistoryItem";
 import { useQueryClient } from "@tanstack/react-query";
-import { HISTORY_KEY, type HistoryItem } from "./utils/fetchHistory";
-import { updateDescription } from "./utils/updateDescription";
+import { HISTORY_KEY, type HistoryItem } from "../utils/fetchHistory";
+import { updateDescription } from "../utils/updateDescription";
 
 export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
   const queryClient = useQueryClient();

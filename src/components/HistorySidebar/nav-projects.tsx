@@ -9,7 +9,7 @@ import {
   fetchHistory,
   HISTORY_KEY,
   type HistoryItem,
-} from "./utils/fetchHistory";
+} from "../utils/fetchHistory";
 import { AiOutlinePlusSquare } from "react-icons/ai";
 import HistoryItemComponent from "./HistoryItemComponent";
 

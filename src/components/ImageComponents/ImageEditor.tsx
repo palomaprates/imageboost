@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { supabase } from "../services/supabaseClient";
+import { supabase } from "../../services/supabaseClient";
 import { useQueryClient } from "@tanstack/react-query";
-import { HISTORY_KEY } from "./utils/fetchHistory";
-import toBase64 from "./utils/toBase64";
+import { HISTORY_KEY } from "../utils/fetchHistory";
+import toBase64 from "../utils/toBase64";
 import { LuImagePlus } from "react-icons/lu";
-import FileDetails from "./FileDetails";
+import FileDetails from "../HistorySidebar/FileDetails";
 import { useNavigate } from "@tanstack/react-router";
 
 export type Generation = {

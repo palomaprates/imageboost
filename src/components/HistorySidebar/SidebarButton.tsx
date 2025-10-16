@@ -1,5 +1,5 @@
 import { LuMenu } from "react-icons/lu";
-import { useSidebar } from "./ui/sidebar";
+import { useSidebar } from "../ui/sidebar";
 
 export default function SidebarButton() {
   const { toggleSidebar } = useSidebar();

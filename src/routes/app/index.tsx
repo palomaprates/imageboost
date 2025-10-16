@@ -1,5 +1,5 @@
-import ImageEditor from "@/components/ImageEditor";
-import ImageEditorTitle from "@/components/ImageEditorTitle";
+import ImageEditor from "@/components/ImageComponents/ImageEditor";
+import ImageEditorTitle from "@/components/ImageComponents/ImageEditorTitle";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/app/")({
