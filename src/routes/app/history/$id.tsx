@@ -1,4 +1,4 @@
-import DisplayImages from "@/components/DisplayImages";
+import DisplayImages from "@/components//ImageComponents/DisplayImages";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { fetchImage } from "@/components/utils/fetchImage";

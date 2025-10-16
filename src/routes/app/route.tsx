@@ -1,4 +1,4 @@
-import Page from "@/components/Page";
+import Page from "@/components/PageComponents/Page";
 import { useAuth } from "@/context/AuthContext";
 import { createFileRoute, Navigate, useNavigate } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
