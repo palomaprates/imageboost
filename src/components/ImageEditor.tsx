@@ -49,7 +49,7 @@ export default function ImageEditor() {
     }
     setLoading(true);
     try {
-      navigate({ to: "/app/loadPage" });
+      navigate({ to: "/app/loadingRoute" });
       const imageb64 = await toBase64(image);
       const { data, error } = await supabase.functions.invoke<Generation>(
         "image-generator",
@@ -60,6 +60,7 @@ export default function ImageEditor() {
           },
         }
       );
+      await new Promise((resolve) => setTimeout(resolve, 10000));
 
       if (error) {
         throw new Error("Erro na requisição");
@@ -108,10 +109,10 @@ export default function ImageEditor() {
         />
         <label
           htmlFor="fileInput"
-          className="flex gap-2 items-center mt-8 px-6 py-3 bg-purple-800 hover:bg-purple-900 text-white font-montserrat rounded-xl shadow-lg transition cursor-pointer"
+          className="flex gap-2 items-center mt-8 px-6 py-3 bg-purple-800 hover:bg-purple-900  text-white font-montserrat rounded-xl shadow-lg transition cursor-pointer"
         >
           <LuImagePlus />
-          <span className="flex justify-center text-sm">
+          <span className="flex justify-center text-sm hover:text-l">
             Selecione sua imagem
           </span>
         </label>
