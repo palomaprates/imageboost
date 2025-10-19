@@ -14,13 +14,13 @@ function RouteComponent() {
   };
 
   return (
-    <div className="flex items-center justify-center w-full mx-auto my-auto px-7 sm:px-12 max-w-[700px] h-screen">
-      <div className="flex flex-col items-center justify-center w-full mx-auto my-auto">
+    <div className="flex items-center justify-center min-w-full mx-auto my-auto px-7 sm:px-12 max-w-[500px] h-screen">
+      <div className="flex flex-col items-center justify-center max-w-full mx-auto my-auto">
         <Slogan />
         <ImageCompare />
         <button
           onClick={handleNavigate}
-          className="my-8 w-full bg-purple-800 hover:bg-purple-900 text-white
+          className="my-8 min-w-full bg-purple-800 hover:bg-purple-900 text-white
                      font-montserrat text-l rounded-xl px-4 sm:px-6 py-3 shadow-md transition cursor-pointer text-sm"
         >
           Editar Imagem
