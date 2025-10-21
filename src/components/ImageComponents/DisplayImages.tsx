@@ -1,13 +1,18 @@
+import { useState } from "react";
+import { download } from "../utils/download";
 import { ImageDownloadButton } from "./ImageDownloadButton";
 
 export type DisplayImagesProps = {
   originalImageUrl: string;
   variationImageUrl: string;
 };
+
 export default function DisplayImages({
   originalImageUrl,
   variationImageUrl,
 }: DisplayImagesProps) {
+  const [loading, setLoading] = useState(false);
+
   return (
     <div className="flex items-center justify-center p-10">
       <div className="flex flex-wrap justify-center gap-10">
@@ -22,12 +27,13 @@ export default function DisplayImages({
             <img
               src={originalImageUrl}
               alt="Original"
-              className="w-12 h-12 rounded-lg object-cover"
+              className="w-12 h-12 rounded-lg object-cover cursor-pointer"
+              onClick={() =>
+                download({ setLoading, imageUrl: originalImageUrl })
+              }
             />
-            <div className="flex flex-col">
-              <span className="text-white text-sm font-medium">Original</span>
-              <ImageDownloadButton imageUrl={originalImageUrl} />
-            </div>
+
+            <span className="text-white text-sm font-medium">Original</span>
           </div>
         </div>
       </div>

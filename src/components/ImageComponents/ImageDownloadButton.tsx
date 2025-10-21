@@ -1,5 +1,6 @@
 import { Download } from "lucide-react";
 import { useState } from "react";
+import { download } from "../utils/download";
 
 interface DownloadButtonProps {
   imageUrl: string;
@@ -12,28 +13,9 @@ export function ImageDownloadButton({
 }: DownloadButtonProps) {
   const [loading, setLoading] = useState(false);
 
-  const handleDownload = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = imageUrl.split("/").pop() || "imagem.jpg";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
-      URL.revokeObjectURL(blobUrl);
-    } catch (err) {
-      console.error("Erro ao baixar imagem:", err);
-    } finally {
-      setLoading(false);
-    }
+  const handleDownload = () => {
+    download({ setLoading, imageUrl });
   };
-
   return (
     <button
       onClick={(e) => {
