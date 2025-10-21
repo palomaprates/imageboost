@@ -1,9 +1,12 @@
 import { corsHeaders } from "./corsHeaders.ts";
 import { createClient } from "@supabase/supabase-js";
-import { description } from "../../utils/description.ts";
 import { base64ToBytes } from "../../utils/base64ToBytes.ts";
 import { generateImages } from "../../utils/generateImages.ts";
-
+import {
+  createPartFromUri,
+  createUserContent,
+  GoogleGenAI,
+} from "@google/genai";
 const supabaseUrl =
   Deno.env.get("PROJECT_URL")?.replace("127.0.0.1", "host.docker.internal") ||
   "";
@@ -18,8 +21,6 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
   try {
-    const imageDescription = description();
-
     const { data: buckets } = await supabase.storage.listBuckets();
     const bucketExists = buckets?.some((bucket) => bucket.name === "images");
     if (!bucketExists) {
@@ -51,6 +52,7 @@ Deno.serve(async (req) => {
     const fileExtension = mimeMatch ? mimeMatch[1].split("/")[1] : "png";
     const mimeType = mimeMatch ? mimeMatch[1] : "image/png";
     const originalPath = `image-generator/${Date.now()}.${fileExtension}`;
+    const blob = new Blob([base64ToBytes(cleanBase64)], { type: "image/png" });
 
     await supabase.storage.from("images").upload(originalPath, fileBytes, {
       contentType: mimeType,
@@ -70,6 +72,32 @@ Deno.serve(async (req) => {
 
     //para teste
     // const generatedUrl = originalUrl;
+
+    const apiKey = Deno.env.get("GEMINI_API_KEY");
+
+    if (!apiKey) {
+      throw new Error("GEMINI_API_KEY não configurada");
+    }
+
+    const ai = new GoogleGenAI({ apiKey });
+    const image = await ai.files.upload({
+      file: blob,
+    });
+    if (!image.uri || !image.mimeType) {
+      throw new Error(
+        "Failed to upload image to Google AI: missing uri or mimeType",
+      );
+    }
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: [
+        createUserContent([
+          "Create only one short title description about this food photograph in portuguese",
+          createPartFromUri(image.uri, image.mimeType),
+        ]),
+      ],
+    });
+    const imageDescription = response.text;
 
     const openaiRes = await generateImages(cleanBase64);
     if (!openaiRes.ok) {
