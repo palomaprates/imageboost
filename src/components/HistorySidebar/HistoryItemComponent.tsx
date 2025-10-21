@@ -19,7 +19,6 @@ import { TbPencil } from "react-icons/tb";
 import { deleteHistoryItem } from "../utils/deleteHistoryItem";
 import { useQueryClient } from "@tanstack/react-query";
 import { HISTORY_KEY, type HistoryItem } from "../utils/fetchHistory";
-import { updateDescription } from "../utils/updateDescription";
 
 export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
   const queryClient = useQueryClient();
@@ -35,7 +34,6 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
     }
     if (newValue !== item.description) {
       try {
-        await updateDescription(item.id, newValue);
         await queryClient.invalidateQueries({ queryKey: [HISTORY_KEY] });
       } catch (err) {
         console.error("falha ao salvar:", err);
