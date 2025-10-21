@@ -7,5 +7,5 @@ export function description() {
 
     const dateStr = `${day}/${month}/${year}`;
 
-    return `Nova imagem gerada — ${dateStr}`;
+    return `Imagem gerada - ${dateStr}`;
 }
