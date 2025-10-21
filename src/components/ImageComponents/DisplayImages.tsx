@@ -16,7 +16,7 @@ export default function DisplayImages({
   return (
     <div className="flex items-center justify-center p-10">
       <div className="flex flex-wrap justify-center gap-10">
-        <div className="flex relative w-96 h-96 rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.5)] max-w-sm">
+        <div className="flex relative md:w-100 md:h-100 h-80 w-80 rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.5)] max-w-sm">
           <img
             src={variationImageUrl}
             alt={"Variação"}
