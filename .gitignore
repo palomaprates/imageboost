@@ -34,3 +34,6 @@ dist-ssr
 *.db
 *.sqlite
 *.sql
+
+
+.tanstack/tmp
