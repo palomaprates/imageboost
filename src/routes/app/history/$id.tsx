@@ -28,7 +28,8 @@ function HistoryRoute() {
   return (
     <div className="my-auto mx-auto">
       <DisplayImages
-        imageUrls={[generation.image_url, ...generation.variations_url]}
+        originalImageUrl={generation.image_url}
+        variationImageUrl={generation.variation_url}
       />
     </div>
   );

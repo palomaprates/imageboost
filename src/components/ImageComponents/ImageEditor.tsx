@@ -10,7 +10,7 @@ import { useNavigate } from "@tanstack/react-router";
 export type Generation = {
   id: string;
   image_url: string;
-  variations_url: string[];
+  variation_url: string;
   description: string;
   user_id: string;
   created_at: string;
@@ -60,7 +60,6 @@ export default function ImageEditor() {
           },
         }
       );
-      await new Promise((resolve) => setTimeout(resolve, 10000));
 
       if (error) {
         throw new Error("Erro na requisição");
