@@ -111,11 +111,11 @@ export default function ImageEditor() {
           className="flex gap-2 items-center mt-8 px-6 py-3 bg-purple-800 hover:bg-purple-900  text-white font-montserrat rounded-xl shadow-lg transition cursor-pointer"
         >
           <LuImagePlus />
-          <span className="flex justify-center text-sm hover:text-l">
+          <span className="flex justify-center text-sm md:text-md hover:text-lg">
             Selecione sua imagem
           </span>
         </label>
-        <p className="text-purple-800 mt-4 font-montserrat select-none text-sm">
+        <p className="text-purple-800 mt-4 font-montserrat select-none text-sm md:text-md">
           Ou arraste aqui
         </p>
       </div>
@@ -130,7 +130,7 @@ export default function ImageEditor() {
       <button
         onClick={handleUpload}
         className="mb-8 w-full bg-white hover:bg-gray-100 text-purple-800
-                     font-montserrat text-l rounded-xl px-4 sm:px-6 py-3 shadow-md transition cursor-pointer text-sm"
+                     font-montserrat text-l rounded-xl px-4 sm:px-6 py-3 shadow-md transition cursor-pointer text-md"
         disabled={loading || !image}
       >
         {loading ? "Carregando..." : "Enviar"}

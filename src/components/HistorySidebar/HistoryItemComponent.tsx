@@ -84,7 +84,7 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
             onBlur={handleSave}
             onKeyDown={handleKeyDown}
             onMouseDown={(e) => e.stopPropagation()}
-            className={`font-montserrat text-xs ${isEditing ? "border border-purple-400 rounded px-1" : ""}`}
+            className={`font-montserrat text-sm ${isEditing ? "border border-purple-400 rounded px-1" : ""}`}
             tabIndex={isEditing ? 0 : -1}
           >
             {item.description}

@@ -21,7 +21,7 @@ function RouteComponent() {
         <button
           onClick={handleNavigate}
           className="my-8 min-w-full bg-purple-800 hover:bg-purple-900 text-white
-                     font-montserrat rounded-xl px-4 sm:px-6 py-3 shadow-md transition cursor-pointer text-sm"
+                     font-montserrat rounded-xl px-4 sm:px-6 py-3 shadow-md transition cursor-pointer text-md"
         >
           Editar Imagem
         </button>
