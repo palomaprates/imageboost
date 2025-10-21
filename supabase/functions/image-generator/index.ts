@@ -1,6 +1,6 @@
 import { corsHeaders } from "./corsHeaders.ts";
 import { createClient } from "@supabase/supabase-js";
-
+import { description } from "../../utils/description.ts";
 const supabaseUrl =
   Deno.env.get("PROJECT_URL")?.replace("127.0.0.1", "host.docker.internal") ||
   "";
@@ -23,6 +23,8 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
   try {
+    const imageDescription = description();
+
     const { data: buckets } = await supabase.storage.listBuckets();
     const bucketExists = buckets?.some((bucket) => bucket.name === "images");
 
@@ -142,7 +144,6 @@ Deno.serve(async (req) => {
       );
     }
     const generatedUrl = fileUrlData.publicUrl;
-
     const { data: inserted, error: dbError } = await supabase
       .from("images")
       .insert([
@@ -150,7 +151,7 @@ Deno.serve(async (req) => {
           user_id,
           image_url: originalUrl,
           variation_url: generatedUrl,
-          description: `Histórico ${Date.now()}`,
+          description: imageDescription,
         },
       ])
       .select()
