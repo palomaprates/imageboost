@@ -1,6 +1,9 @@
 import { corsHeaders } from "./corsHeaders.ts";
 import { createClient } from "@supabase/supabase-js";
 import { description } from "../../utils/description.ts";
+import { base64ToBytes } from "../../utils/base64ToBytes.ts";
+import { generateImages } from "../../utils/generateImages.ts";
+
 const supabaseUrl =
   Deno.env.get("PROJECT_URL")?.replace("127.0.0.1", "host.docker.internal") ||
   "";
@@ -8,15 +11,7 @@ const supabaseServiceKey = Deno.env.get("SERVICE_KEY") || "";
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-function base64ToBytes(base64: string) {
-  const binary = atob(base64);
-  const len = binary.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes;
-}
+export const OPENAI_KEY = Deno.env.get("OPENAI_API_KEY");
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -27,32 +22,30 @@ Deno.serve(async (req) => {
 
     const { data: buckets } = await supabase.storage.listBuckets();
     const bucketExists = buckets?.some((bucket) => bucket.name === "images");
-
     if (!bucketExists) {
       const { data: bucketData, error: bucketError } = await supabase.storage
         .createBucket("images", {
           public: true,
         });
-
       if (bucketError) console.error("erro ao criar bucket", bucketError);
       else console.log("Bucket criado:", bucketData);
     }
 
     const { file, user_id } = await req.json();
-
     if (!file) {
       return new Response("Arquivo não enviado", {
         status: 400,
         headers: corsHeaders,
       });
     }
+
     const base64Data = file.includes(",") ? file.split(",")[1] : file;
     const cleanBase64 = base64Data.trim().replace(/\s/g, "");
-
     if (!cleanBase64 || cleanBase64.length < 100) {
       console.error("Base64 data failed pre-check.");
       throw new Error("Invalid base64 image data");
     }
+
     const fileBytes = base64ToBytes(cleanBase64);
     const mimeMatch = file.match(/data:(.*?);base64,/);
     const fileExtension = mimeMatch ? mimeMatch[1].split("/")[1] : "png";
@@ -76,29 +69,9 @@ Deno.serve(async (req) => {
     // const originalUrl = originalUrlData.publicUrl;
 
     //para teste
-    // const generatedUrls = [originalUrl, originalUrl];
+    // const generatedUrl = originalUrl;
 
-    //  OPENAI ---------\/----------\\
-    const prompt =
-      "Enhance this food photo while keeping all original food elements and their exact positions. Improve sharpness, resolution, and clarity to make the dish look vivid, fresh, and highly appetizing. Use natural lighting and realistic textures, enhancing contrast and vibrancy in a balanced way that highlights the ingredients and details. Always remove forks, knives, or any cutlery from the image. Do not add or invent elements that were not in the original dish. The final result should be high-resolution, realistic, and visually irresistible.";
-
-    const blob = new Blob([base64ToBytes(cleanBase64)], { type: "image/png" });
-
-    const form = new FormData();
-    form.append("model", "gpt-image-1");
-    form.append("prompt", prompt);
-    form.append("size", "1024x1024");
-    form.append("image", blob, "image.png");
-    form.append("n", "1");
-
-    const openaiRes = await fetch("https://api.openai.com/v1/images/edits", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${Deno.env.get("OPENAI_API_KEY")}`,
-      },
-      body: form,
-    });
-
+    const openaiRes = await generateImages(cleanBase64);
     if (!openaiRes.ok) {
       const errText = await openaiRes.text();
       console.error("OpenAI erro:", errText);
@@ -144,6 +117,7 @@ Deno.serve(async (req) => {
       );
     }
     const generatedUrl = fileUrlData.publicUrl;
+
     const { data: inserted, error: dbError } = await supabase
       .from("images")
       .insert([
