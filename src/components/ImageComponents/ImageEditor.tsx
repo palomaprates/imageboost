@@ -51,16 +51,21 @@ export default function ImageEditor() {
     try {
       navigate({ to: "/app/loadingRoute" });
       const imageb64 = await toBase64(image);
+
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
+      if (userError || !userData.user) {
+        throw new Error("Você precisa estar logado");
+      }
+
       const { data, error } = await supabase.functions.invoke<Generation>(
         "image-generator",
         {
           body: {
             file: imageb64,
-            user_id: "8059f3bf-80d2-4d4e-8194-212a7bf5cacb",
           },
         }
       );
-
       if (error) {
         throw new Error("Erro na requisição");
       }
