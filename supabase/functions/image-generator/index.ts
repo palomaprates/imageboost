@@ -1,18 +1,12 @@
 import { corsHeaders } from "./corsHeaders.ts";
 import { createClient } from "@supabase/supabase-js";
 import { base64ToBytes } from "../../utils/base64ToBytes.ts";
-import { generateImages } from "../../utils/generateImages.ts";
+// import { generateImages } from "../../utils/generateImages.ts";
 import {
   createPartFromUri,
   createUserContent,
   GoogleGenAI,
 } from "@google/genai";
-const supabaseUrl =
-  Deno.env.get("PROJECT_URL")?.replace("127.0.0.1", "host.docker.internal") ||
-  "";
-const supabaseServiceKey = Deno.env.get("SERVICE_KEY") || "";
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 export const OPENAI_KEY = Deno.env.get("OPENAI_API_KEY");
 
@@ -21,18 +15,27 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
   try {
-    const { data: buckets } = await supabase.storage.listBuckets();
-    const bucketExists = buckets?.some((bucket) => bucket.name === "images");
-    if (!bucketExists) {
-      const { data: bucketData, error: bucketError } = await supabase.storage
-        .createBucket("images", {
-          public: true,
-        });
-      if (bucketError) console.error("erro ao criar bucket", bucketError);
-      else console.log("Bucket criado:", bucketData);
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      throw new Error("Não autenticado");
     }
+    const supabase = createClient(
+      Deno.env.get("PROJECT_URL") ?? "",
+      Deno.env.get("ANON_KEY") ?? "",
+      {
+        global: {
+          headers: { Authorization: authHeader },
+        },
+      },
+    );
 
-    const { file, user_id } = await req.json();
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      throw new Error("Não autenticado");
+    }
+    await supabase.from("users").insert([{ id: user?.id, email: user?.email }]);
+
+    const { file } = await req.json();
     if (!file) {
       return new Response("Arquivo não enviado", {
         status: 400,
@@ -51,7 +54,8 @@ Deno.serve(async (req) => {
     const mimeMatch = file.match(/data:(.*?);base64,/);
     const fileExtension = mimeMatch ? mimeMatch[1].split("/")[1] : "png";
     const mimeType = mimeMatch ? mimeMatch[1] : "image/png";
-    const originalPath = `image-generator/${Date.now()}.${fileExtension}`;
+    const originalPath =
+      `${user.id}/image-generator/${Date.now()}.${fileExtension}`;
     const blob = new Blob([base64ToBytes(cleanBase64)], { type: "image/png" });
 
     await supabase.storage.from("images").upload(originalPath, fileBytes, {
@@ -63,15 +67,15 @@ Deno.serve(async (req) => {
       .getPublicUrl(originalPath);
 
     //para local:
-    const originalUrl = originalUrlData.publicUrl.replace(
-      "host.docker.internal",
-      "localhost",
-    );
+    // const originalUrl = originalUrlData.publicUrl.replace(
+    //   "host.docker.internal",
+    //   "localhost",
+    // );
     //para prod:
-    // const originalUrl = originalUrlData.publicUrl;
+    const originalUrl = originalUrlData.publicUrl;
 
     //para teste
-    // const generatedUrl = originalUrl;
+    const generatedUrl = originalUrl;
 
     const apiKey = Deno.env.get("GEMINI_API_KEY");
 
@@ -99,58 +103,58 @@ Deno.serve(async (req) => {
     });
     const imageDescription = response.text;
 
-    const openaiRes = await generateImages(cleanBase64);
-    if (!openaiRes.ok) {
-      const errText = await openaiRes.text();
-      console.error("OpenAI erro:", errText);
-      return new Response(`OpenAI erro: ${openaiRes.status}`, {
-        status: 502,
-        headers: corsHeaders,
-      });
-    }
+    // const openaiRes = await generateImages(cleanBase64);
+    // if (!openaiRes.ok) {
+    //   const errText = await openaiRes.text();
+    //   console.error("OpenAI erro:", errText);
+    //   return new Response(`OpenAI erro: ${openaiRes.status}`, {
+    //     status: 502,
+    //     headers: corsHeaders,
+    //   });
+    // }
 
-    const openAiJson = await openaiRes.json() as {
-      data: { b64_json: string }[];
-    };
-    if (!openAiJson?.data?.length) {
-      return new Response("Resposta sem imagem da OpenAI", {
-        status: 502,
-        headers: corsHeaders,
-      });
-    }
+    // const openAiJson = await openaiRes.json() as {
+    //   data: { b64_json: string }[];
+    // };
+    // if (!openAiJson?.data?.length) {
+    //   return new Response("Resposta sem imagem da OpenAI", {
+    //     status: 502,
+    //     headers: corsHeaders,
+    //   });
+    // }
 
-    const b64 = openAiJson.data[0].b64_json;
-    const outputBytes = base64ToBytes(b64);
-    const filePath = `generated/${Date.now()}.png`;
+    // const b64 = openAiJson.data[0].b64_json;
+    // const outputBytes = base64ToBytes(b64);
+    // const filePath = `${user.id}/generated/${Date.now()}.png`;
 
-    const { error: uploadError } = await supabase.storage
-      .from("images")
-      .upload(filePath, outputBytes, {
-        contentType: "image/png",
-        upsert: true,
-      });
+    // const { error: uploadError } = await supabase.storage
+    //   .from("images")
+    //   .upload(filePath, outputBytes, {
+    //     contentType: "image/png",
+    //     upsert: true,
+    //   });
 
-    if (uploadError) {
-      console.error("Erro ao enviar imagem:", uploadError);
-    }
+    // if (uploadError) {
+    //   console.error("Erro ao enviar imagem:", uploadError);
+    // }
 
-    const { data: fileUrlData } = supabase.storage
-      .from("images")
-      .getPublicUrl(filePath);
+    // const { data: fileUrlData } = supabase.storage
+    //   .from("images")
+    //   .getPublicUrl(filePath);
 
-    if (fileUrlData?.publicUrl?.includes("host.docker.internal")) {
-      fileUrlData.publicUrl = fileUrlData.publicUrl.replace(
-        "host.docker.internal",
-        "localhost",
-      );
-    }
-    const generatedUrl = fileUrlData.publicUrl;
+    // if (fileUrlData?.publicUrl?.includes("host.docker.internal")) {
+    //   fileUrlData.publicUrl = fileUrlData.publicUrl.replace(
+    //     "host.docker.internal",
+    //     "localhost",
+    //   );
+    // }
+    // const generatedUrl = fileUrlData.publicUrl;
 
     const { data: inserted, error: dbError } = await supabase
       .from("images")
       .insert([
         {
-          user_id,
+          user_id: user.id,
           image_url: originalUrl,
           variation_url: generatedUrl,
           description: imageDescription,
