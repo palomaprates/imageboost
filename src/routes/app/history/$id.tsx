@@ -26,14 +26,14 @@ function HistoryRoute() {
   }
 
   return (
-    <div className="my-auto mx-auto md:flex">
+    <div className="my-auto mx-auto ">
       <DisplayImages
         originalImageUrl={generation.image_url}
         variationImageUrl={generation.variation_url}
       />
       <div className="w-full text-center select-none flex flex-col items-center justify-center">
         <p className="font-montserrat text-4xl text-black mb-3">
-          Imagem otimizada com sucesso!
+          Imagem otimizada
         </p>
         <p className="font-montserrat text-xl text-gray-600">
           Clique para fazer o download.
