@@ -1,14 +1,13 @@
 import { corsHeaders } from "./corsHeaders.ts";
 import { createClient } from "@supabase/supabase-js";
 import { base64ToBytes } from "../../utils/base64ToBytes.ts";
-// import { generateImages } from "../../utils/generateImages.ts";
 import {
   createPartFromUri,
   createUserContent,
   GoogleGenAI,
 } from "@google/genai";
 
-export const OPENAI_KEY = Deno.env.get("OPENAI_API_KEY");
+export const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -66,16 +65,7 @@ Deno.serve(async (req) => {
     const { data: originalUrlData } = supabase.storage.from("images")
       .getPublicUrl(originalPath);
 
-    //para local:
-    // const originalUrl = originalUrlData.publicUrl.replace(
-    //   "host.docker.internal",
-    //   "localhost",
-    // );
-    //para prod:
     const originalUrl = originalUrlData.publicUrl;
-
-    //para teste
-    const generatedUrl = originalUrl;
 
     const apiKey = Deno.env.get("GEMINI_API_KEY");
 
@@ -103,52 +93,62 @@ Deno.serve(async (req) => {
     });
     const imageDescription = response.text;
 
-    // const openaiRes = await generateImages(cleanBase64);
-    // if (!openaiRes.ok) {
-    //   const errText = await openaiRes.text();
-    //   console.error("OpenAI erro:", errText);
-    //   return new Response(`OpenAI erro: ${openaiRes.status}`, {
-    //     status: 502,
-    //     headers: corsHeaders,
-    //   });
-    // }
+    const prompt =
+      "Enhance this food photo while keeping all original food elements and their exact positions. Improve sharpness, resolution, and clarity to make the dish look vivid, fresh, and highly appetizing. Use natural lighting and realistic textures, enhancing contrast and vibrancy in a balanced way that highlights the ingredients and details. Always remove forks, knives, or any cutlery from the image. Do not add or invent elements that were not in the original dish. The final result should be high-resolution, realistic, and visually irresistible.";
 
-    // const openAiJson = await openaiRes.json() as {
-    //   data: { b64_json: string }[];
-    // };
-    // if (!openAiJson?.data?.length) {
-    //   return new Response("Resposta sem imagem da OpenAI", {
-    //     status: 502,
-    //     headers: corsHeaders,
-    //   });
-    // }
+    const form = new FormData();
+    form.append("model", "gpt-image-1");
+    form.append("prompt", prompt);
+    form.append("size", "1024x1024");
+    form.append("image", blob, "image.png");
+    form.append("n", "1");
 
-    // const b64 = openAiJson.data[0].b64_json;
-    // const outputBytes = base64ToBytes(b64);
-    // const filePath = `${user.id}/generated/${Date.now()}.png`;
+    const openaiRes = await fetch("https://api.openai.com/v1/images/edits", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: form,
+    });
+    if (!openaiRes.ok) {
+      const errText = await openaiRes.text();
+      console.error("OpenAI erro:", errText);
+      return new Response(`OpenAI erro: ${openaiRes.status}`, {
+        status: 502,
+        headers: corsHeaders,
+      });
+    }
 
-    // const { error: uploadError } = await supabase.storage
-    //   .from("images")
-    //   .upload(filePath, outputBytes, {
-    //     contentType: "image/png",
-    //     upsert: true,
-    //   });
+    const openAiJson = await openaiRes.json() as {
+      data: { b64_json: string }[];
+    };
+    if (!openAiJson?.data?.length) {
+      return new Response("Resposta sem imagem da OpenAI", {
+        status: 502,
+        headers: corsHeaders,
+      });
+    }
 
-    // if (uploadError) {
-    //   console.error("Erro ao enviar imagem:", uploadError);
-    // }
+    const b64 = openAiJson.data[0].b64_json;
+    const outputBytes = base64ToBytes(b64);
+    const filePath = `${user.id}/generated/${Date.now()}.png`;
 
-    // const { data: fileUrlData } = supabase.storage
-    //   .from("images")
-    //   .getPublicUrl(filePath);
+    const { error: uploadError } = await supabase.storage
+      .from("images")
+      .upload(filePath, outputBytes, {
+        contentType: "image/png",
+        upsert: true,
+      });
 
-    // if (fileUrlData?.publicUrl?.includes("host.docker.internal")) {
-    //   fileUrlData.publicUrl = fileUrlData.publicUrl.replace(
-    //     "host.docker.internal",
-    //     "localhost",
-    //   );
-    // }
-    // const generatedUrl = fileUrlData.publicUrl;
+    if (uploadError) {
+      console.error("Erro ao enviar imagem:", uploadError);
+    }
+
+    const { data: fileUrlData } = supabase.storage
+      .from("images")
+      .getPublicUrl(filePath);
+
+    const generatedUrl = fileUrlData.publicUrl;
 
     const { data: inserted, error: dbError } = await supabase
       .from("images")
