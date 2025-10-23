@@ -11,7 +11,7 @@ function AuthCallback() {
 
   useEffect(() => {
     const handleSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
+      const { data } = await supabase.auth.getSession();
       if (data?.session) {
         navigate({ to: "/app" });
       } else {

@@ -11,7 +11,7 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
-  const [error, setError] = useState("");
+  const [, setError] = useState("");
 
   const { user } = useAuth();
   const navigate = useNavigate();

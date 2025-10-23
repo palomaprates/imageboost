@@ -11,7 +11,7 @@ export default function DisplayImages({
   originalImageUrl,
   variationImageUrl,
 }: DisplayImagesProps) {
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
 
   return (
     <div className="flex items-center justify-center p-10">
