@@ -7,13 +7,13 @@ import OriginalImage from "../../assets/OriginalImage.jpeg";
 
 export default function ImageCompare() {
   return (
-    <div className="md:w-full md:h-full mx-auto my-auto rounded-4xl flex justify-center overflow-hidden">
+    <div className="md:w-[650px] h-auto mx-auto my-auto rounded-3xl flex justify-center overflow-hidden">
       <ReactCompareSlider
         itemOne={<ReactCompareSliderImage src={OriginalImage} alt="Original" />}
         itemTwo={
           <ReactCompareSliderImage src={GeneratedImage} alt="Generated" />
         }
-        className="md:w-full md:h-[700px] "
+        className="md:w-full md:h-full "
       />
     </div>
   );

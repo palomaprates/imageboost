@@ -1,6 +1,6 @@
 export default function Slogan() {
   return (
-    <div className="w-full text-center select-none">
+    <div className="md:w-[650px] text-center select-none">
       <h1 className="font-montserrat md:text-5xl text-4xl text-gray-900 mb-3">
         Otimize suas fotos com ImageBoost
       </h1>
