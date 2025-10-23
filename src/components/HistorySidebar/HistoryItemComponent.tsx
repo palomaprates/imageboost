@@ -5,7 +5,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "../ui/sidebar";
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
 import {
   DropdownMenu,
@@ -21,6 +21,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { HISTORY_KEY, type HistoryItem } from "../utils/fetchHistory";
 
 export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
+  const navigate = useNavigate();
+  const { toggleSidebar } = useSidebar();
   const queryClient = useQueryClient();
   const spanRef = useRef<HTMLSpanElement>(null);
   const { isMobile } = useSidebar();
@@ -64,33 +66,41 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
       console.error("Erro ao deletar", error);
     }
   }
+  async function handleGoToApp() {
+    toggleSidebar();
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    navigate({ to: "/app/history/$id", params: { id: String(item.id) } });
+  }
   return (
     <SidebarMenuItem key={item.id} className="space-y-3">
-      <Link
+      {/* <Link
         key={item.id}
         to="/app/history/$id"
         params={{ id: String(item.id) }}
+      > */}
+      <SidebarMenuButton
+        className="flex items-center space-x-1 p-2 rounded-lg hover:bg-gray-100 transition cursor-pointer"
+        onClick={handleGoToApp}
       >
-        <SidebarMenuButton className="flex items-center space-x-1 p-2 rounded-lg hover:bg-gray-100 transition cursor-pointer">
-          <img
-            src={item.image_url || "fallback.png"}
-            className="w-7 h-7 rounded-md object-cover"
-            alt="thumbnail"
-          />
-          <span
-            contentEditable={isEditing}
-            suppressContentEditableWarning
-            ref={spanRef}
-            onBlur={handleSave}
-            onKeyDown={handleKeyDown}
-            onMouseDown={(e) => e.stopPropagation()}
-            className={`font-montserrat text-sm ${isEditing ? "border border-purple-400 rounded px-1" : ""}`}
-            tabIndex={isEditing ? 0 : -1}
-          >
-            {item.description}
-          </span>
-        </SidebarMenuButton>
-      </Link>
+        <img
+          src={item.image_url || "fallback.png"}
+          className="w-7 h-7 rounded-md object-cover"
+          alt="thumbnail"
+        />
+        <span
+          contentEditable={isEditing}
+          suppressContentEditableWarning
+          ref={spanRef}
+          onBlur={handleSave}
+          onKeyDown={handleKeyDown}
+          onMouseDown={(e) => e.stopPropagation()}
+          className={`font-montserrat text-sm ${isEditing ? "border border-purple-400 rounded px-1" : ""}`}
+          tabIndex={isEditing ? 0 : -1}
+        >
+          {item.description}
+        </span>
+      </SidebarMenuButton>
+      {/* </Link> */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="text-gray-600 cursor-pointer">
           <SidebarMenuAction showOnHover>
