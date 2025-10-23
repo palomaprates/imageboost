@@ -33,7 +33,7 @@ function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-[350px]">
+      <Card className="w-[450px]">
         <CardHeader>
           <CardTitle className="flex items-center justify-center">
             Inicie sessão
@@ -43,7 +43,7 @@ function LoginPage() {
           <Button
             variant="outline"
             onClick={handleGoogleLogin}
-            className="w-full"
+            className="w-full cursor-pointer"
           >
             <FcGoogle />
             <p className="flex max-w-full font-bold p-10">
