@@ -23,7 +23,7 @@ export default function LoadingPage() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-auto my-auto mx-auto">
+    <div className="flex flex-col items-center justify-center min-h-dvh mx-auto mt-[-80px] overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.div
           key={index}
