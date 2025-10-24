@@ -82,7 +82,7 @@ export default function ImageEditor() {
     <div className="w-full flex gap-4 flex-col justify-center items-center">
       <div
         className={`flex w-full h-70 flex-col items-center justify-center border-2 border-dashed rounded-xl p-10 transition 
-        ${dragActive ? "border-blue-500 bg-blue-50" : "border-orange-600 "}`}
+        ${dragActive ? "border-blue-500 bg-blue-50" : "border-blue-800 "}`}
         onDragOver={(e) => {
           e.preventDefault();
           setDragActive(true);
@@ -113,14 +113,14 @@ export default function ImageEditor() {
         />
         <label
           htmlFor="fileInput"
-          className="flex gap-2 items-center mt-8 px-6 py-3 bg-orange-600 hover:bg-orange-700  text-white font-montserrat rounded-xl shadow-lg transition cursor-pointer"
+          className="flex gap-2 items-center mt-8 px-6 py-3 bg-blue-800 hover:bg-blue-800  text-white font-montserrat rounded-xl shadow-lg transition cursor-pointer"
         >
           <LuImagePlus />
-          <span className="flex justify-center text-sm md:text-md hover:text-lg">
+          <span className="flex justify-center text-sm md:text-md hover:md:text-lg hover:text-md">
             Selecione sua imagem
           </span>
         </label>
-        <p className="text-orange-500 mt-4 font-montserrat select-none text-sm md:text-md">
+        <p className="text-blue-800 mt-4 font-montserrat select-none text-sm md:text-md">
           Ou arraste aqui
         </p>
       </div>
@@ -134,8 +134,8 @@ export default function ImageEditor() {
       )}
       <button
         onClick={handleUpload}
-        className="mb-8 w-full bg-white hover:bg-gray-100 text-orange-600
-                     font-montserrat text-l rounded-xl px-4 sm:px-6 py-3 shadow-md transition cursor-pointer text-md"
+        className="mb-8 w-full bg-blue-800 hover:bg-blue-900 hover:text-lg text-white
+                     font-montserrat rounded-xl px-4 sm:px-6 py-3 shadow-md transition duration-300 cursor-pointer text-md"
         disabled={loading || !image}
       >
         {loading ? "Carregando..." : "Enviar"}
