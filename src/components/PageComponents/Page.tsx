@@ -9,7 +9,7 @@ export default function Page() {
     <div>
       <SidebarProvider>
         <AppSidebar />
-        <SidebarInset className="bg-transparent min-h-full">
+        <SidebarInset className="bg-transparent h-dvh md:min-h-full">
           <div className="cursor-pointer flex items-center px-4 justify-center">
             <SidebarButton />
             <Header />
