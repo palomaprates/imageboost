@@ -9,8 +9,8 @@ const animations = [photoloading, dots, loading];
 
 const messages = [
   "Preparando a sua imagem",
+  "Isso pode levar alguns minutos",
   "Quase lá...",
-  "Só mais um momento ",
 ];
 export default function LoadingPage() {
   const [index, setIndex] = useState(0);
@@ -18,7 +18,7 @@ export default function LoadingPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % animations.length);
-    }, 2500);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
