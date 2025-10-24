@@ -94,8 +94,7 @@ Deno.serve(async (req) => {
     const imageDescription = response.text;
 
     const prompt =
-      "Enhance this food photo while keeping all original food elements and their exact positions. Improve sharpness, resolution, and clarity to make the dish look vivid, fresh, and highly appetizing. Use natural lighting and realistic textures, enhancing contrast and vibrancy in a balanced way that highlights the ingredients and details. Always remove forks, knives, or any cutlery from the image. Do not add or invent elements that were not in the original dish. The final result should be high-resolution, realistic, and visually irresistible.";
-
+      "Enhance this food photo while keeping all original elements, shapes, and positions. Improve sharpness, resolution, and lighting to make the dish look vivid, natural, and appetizing. Boost contrast and color vibrancy, remove cutlery, food imperfections, and distractions, without adding anything new. The final image should look realistic, high-quality, and professionally styled.";
     const form = new FormData();
     form.append("model", "gpt-image-1");
     form.append("prompt", prompt);
