@@ -20,7 +20,7 @@ function RouteComponent() {
         <ImageCompare />
         <button
           onClick={handleNavigate}
-          className="my-8 md:w-[500px] w-full bg-blue-800 hover:bg-blue-900 text-white
+          className="my-8 md:w-[500px] w-full bg-orange-500 hover:bg-orange-600 text-white
                      font-montserrat rounded-xl px-4 py-3 shadow-md transition cursor-pointer text-md mx-auto"
         >
           Editar Imagem
