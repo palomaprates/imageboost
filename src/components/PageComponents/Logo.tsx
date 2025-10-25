@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-// import { GiSmallFire } from "react-icons/gi";
 import logo from "../../assets/Logo.png";
 
 export default function Logo() {
