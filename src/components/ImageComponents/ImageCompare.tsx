@@ -2,8 +2,8 @@ import {
   ReactCompareSlider,
   ReactCompareSliderImage,
 } from "react-compare-slider";
-import GeneratedImage from "../../assets/GeneratedImage.jpeg";
-import OriginalImage from "../../assets/OriginalImage.jpeg";
+import GeneratedImage from "../../assets/generatedImage.jpeg";
+import OriginalImage from "../../assets/originalImage.jpeg";
 
 export default function ImageCompare() {
   return (
