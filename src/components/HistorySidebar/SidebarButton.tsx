@@ -6,7 +6,7 @@ export default function SidebarButton() {
 
   return (
     <div onClick={toggleSidebar}>
-      <LuMenu className="w-6 h-6 hover:text-purple-900 transition duration-300" />
+      <LuMenu className="w-6 h-6 hover:text-purple-900 transition duration-300 cursor-pointer" />
     </div>
   );
 }
