@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "../../services/supabaseClient";
 import { useQueryClient } from "@tanstack/react-query";
 import { HISTORY_KEY } from "../utils/fetchHistory";
@@ -24,20 +24,83 @@ export default function ImageEditor() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
+  // ref para manter a última URL de preview (blob) e revogá-la corretamente
+  const prevPreviewRef = useRef<string | null>(null);
+
   const handleFile = (file: File) => {
     console.log("handleFile:", file.name, file.type, file.size);
-    if (!file.type || !file.type.startsWith("image/")) {
-      console.warn(
-        "Ficheiro não é uma imagem (ou MIME desconhecido):",
-        file.type
-      );
+
+    // permitir arquivos mesmo que não tenham MIME (alguns mobiles)
+    const hasMime = !!file.type;
+
+    if (hasMime && !file.type.startsWith("image/")) {
+      console.warn("Arquivo não é uma imagem (mime):", file.type);
       return;
     }
+
+    // prosseguir mesmo sem mime/extension — tentaremos ler
     setImage(file);
-    setPreview(URL.createObjectURL(file));
+
+    // revoga preview anterior se for blob
+    if (prevPreviewRef.current === undefined) prevPreviewRef.current = null;
+
+    try {
+      const url = URL.createObjectURL(file);
+      // revoga anterior
+      if (
+        prevPreviewRef.current &&
+        prevPreviewRef.current.startsWith("blob:")
+      ) {
+        try {
+          URL.revokeObjectURL(prevPreviewRef.current);
+        } catch (e) {
+          // ignore
+        }
+      }
+      prevPreviewRef.current = url;
+      setPreview(url);
+    } catch (err) {
+      // fallback para FileReader quando createObjectURL não é suportado
+      const reader = new FileReader();
+      reader.onload = () => {
+        // revoga anterior se blob
+        if (
+          prevPreviewRef.current &&
+          prevPreviewRef.current.startsWith("blob:")
+        ) {
+          try {
+            URL.revokeObjectURL(prevPreviewRef.current);
+          } catch (e) {}
+        }
+        prevPreviewRef.current = null;
+        setPreview(String(reader.result));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
+  useEffect(() => {
+    return () => {
+      if (
+        prevPreviewRef.current &&
+        prevPreviewRef.current.startsWith("blob:")
+      ) {
+        try {
+          URL.revokeObjectURL(prevPreviewRef.current);
+        } catch (e) {
+          // ignore
+        }
+      }
+    };
+  }, []);
+
   const handleRemove = () => {
+    if (prevPreviewRef.current && prevPreviewRef.current.startsWith("blob:")) {
+      try {
+        URL.revokeObjectURL(prevPreviewRef.current);
+      } catch (e) {}
+      prevPreviewRef.current = null;
+    }
     setImage(null);
     setPreview(null);
   };
@@ -82,7 +145,7 @@ export default function ImageEditor() {
     <div className="w-full flex gap-4 flex-col justify-center items-center">
       <div
         className={`flex w-full h-70 flex-col items-center justify-center border-2 border-dashed rounded-xl p-10 transition 
-        ${dragActive ? "border-blue-500 bg-blue-50" : "border-orange-500 "}`}
+        ${dragActive ? "border-blue-500 bg-blue-50" : "border-orange-600 "}`}
         onDragOver={(e) => {
           e.preventDefault();
           setDragActive(true);
@@ -113,14 +176,14 @@ export default function ImageEditor() {
         />
         <label
           htmlFor="fileInput"
-          className="flex gap-2 items-center mt-8 px-6 py-3 bg-orange-500 hover:bg-orange-600  text-white font-montserrat rounded-xl shadow-lg transition cursor-pointer"
+          className="flex gap-2 items-center mt-8 px-6 py-3 bg-orange-600 hover:bg-orange-600  text-white font-montserrat rounded-xl shadow-lg transition cursor-pointer"
         >
           <LuImagePlus />
           <span className="flex justify-center text-sm md:text-md hover:md:text-lg hover:text-md">
             Selecione sua imagem
           </span>
         </label>
-        <p className="text-orange-500 mt-4 font-montserrat select-none text-sm md:text-md">
+        <p className="text-orange-600 mt-4 font-montserrat select-none text-sm md:text-md">
           Ou arraste aqui
         </p>
       </div>
@@ -134,7 +197,7 @@ export default function ImageEditor() {
       )}
       <button
         onClick={handleUpload}
-        className="mb-8 w-full bg-orange-500 hover:bg-orange-600 hover:text-lg text-white
+        className="mb-8 w-full bg-orange-600 hover:bg-orange-700 hover:text-lg text-white
                      font-montserrat rounded-xl px-4 sm:px-6 py-3 shadow-md transition duration-300 cursor-pointer text-md"
         disabled={loading || !image}
       >
