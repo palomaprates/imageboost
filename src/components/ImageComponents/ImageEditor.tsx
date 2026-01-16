@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { supabase } from "../../services/supabaseClient";
 import { useQueryClient } from "@tanstack/react-query";
 import { HISTORY_KEY } from "../utils/fetchHistory";
@@ -24,83 +24,20 @@ export default function ImageEditor() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  // ref para manter a última URL de preview (blob) e revogá-la corretamente
-  const prevPreviewRef = useRef<string | null>(null);
-
   const handleFile = (file: File) => {
     console.log("handleFile:", file.name, file.type, file.size);
-
-    // permitir arquivos mesmo que não tenham MIME (alguns mobiles)
-    const hasMime = !!file.type;
-
-    if (hasMime && !file.type.startsWith("image/")) {
-      console.warn("Arquivo não é uma imagem (mime):", file.type);
+    if (!file.type || !file.type.startsWith("image/")) {
+      console.warn(
+        "Ficheiro não é uma imagem (ou MIME desconhecido):",
+        file.type
+      );
       return;
     }
-
-    // prosseguir mesmo sem mime/extension — tentaremos ler
     setImage(file);
-
-    // revoga preview anterior se for blob
-    if (prevPreviewRef.current === undefined) prevPreviewRef.current = null;
-
-    try {
-      const url = URL.createObjectURL(file);
-      // revoga anterior
-      if (
-        prevPreviewRef.current &&
-        prevPreviewRef.current.startsWith("blob:")
-      ) {
-        try {
-          URL.revokeObjectURL(prevPreviewRef.current);
-        } catch (e) {
-          // ignore
-        }
-      }
-      prevPreviewRef.current = url;
-      setPreview(url);
-    } catch (err) {
-      // fallback para FileReader quando createObjectURL não é suportado
-      const reader = new FileReader();
-      reader.onload = () => {
-        // revoga anterior se blob
-        if (
-          prevPreviewRef.current &&
-          prevPreviewRef.current.startsWith("blob:")
-        ) {
-          try {
-            URL.revokeObjectURL(prevPreviewRef.current);
-          } catch (e) {}
-        }
-        prevPreviewRef.current = null;
-        setPreview(String(reader.result));
-      };
-      reader.readAsDataURL(file);
-    }
+    setPreview(URL.createObjectURL(file));
   };
 
-  useEffect(() => {
-    return () => {
-      if (
-        prevPreviewRef.current &&
-        prevPreviewRef.current.startsWith("blob:")
-      ) {
-        try {
-          URL.revokeObjectURL(prevPreviewRef.current);
-        } catch (e) {
-          // ignore
-        }
-      }
-    };
-  }, []);
-
   const handleRemove = () => {
-    if (prevPreviewRef.current && prevPreviewRef.current.startsWith("blob:")) {
-      try {
-        URL.revokeObjectURL(prevPreviewRef.current);
-      } catch (e) {}
-      prevPreviewRef.current = null;
-    }
     setImage(null);
     setPreview(null);
   };

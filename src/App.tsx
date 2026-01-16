@@ -18,7 +18,7 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <div className="w-screen md:min-h-full h-dvh bg-gray-50">
+          <div className="w-screen md:min-h-full h-dvh bg-white">
             <RouterProvider router={router} />
           </div>
           <ReactQueryDevtools initialIsOpen={false} />
