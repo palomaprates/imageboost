@@ -95,7 +95,6 @@ export default function HistoryItemComponent({ item }: { item: HistoryItem }) {
           {item.description}
         </span>
       </SidebarMenuButton>
-      {/* </Link> */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="text-gray-600 cursor-pointer">
           <SidebarMenuAction showOnHover>
